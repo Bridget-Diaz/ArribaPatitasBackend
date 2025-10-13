@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Agendar Cita</title>
+  <style>
+    * {margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Tahoma,sans-serif;}
+
+    body {
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      overflow:hidden;
+      color:#fff;
+    }
+
+    /* Fondo con imágenes rotatorias */
+    .background {
+      position: fixed;
+      top:0; left:0;
+      width:100%; height:100%;
+      z-index:-1;
+      background-size:cover;
+      background-position:center;
+      animation: cambiarFondo 36s infinite; /* 4 imágenes × 9s cada una */
+    }
+
+    @keyframes cambiarFondo {
+      0%   { background-image: url("https://images.unsplash.com/photo-1654919638951-87361390c91a?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"); }
+      25%  { background-image: url("https://images.unsplash.com/photo-1728013274420-ed02b1f58887?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"); }
+      50%  { background-image: url("https://images.unsplash.com/photo-1596272875729-ed2ff7d6d9c5?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"); }
+      75%  { background-image: url("https://images.unsplash.com/photo-1734750943714-cb5e475ec911?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"); }
+      100% { background-image: url("https://images.unsplash.com/photo-1553688738-a278b9f063e0?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"); }
+    }
+
+    /* Caja del formulario estilo rectangular */
+    .card {
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(12px);
+      border-radius: 16px;
+      padding: 36px;
+      width: 800px;    /* más ancho */
+      max-width: 95%;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {opacity:0; transform: translateY(15px);}
+      to {opacity:1; transform: translateY(0);}
+    }
+
+    h1 {
+      text-align:center;
+      margin-bottom:20px;
+      font-size:1.8rem;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+    }
+
+    label {
+      font-weight:600;
+      display:block;
+      margin-top:14px;
+      margin-bottom:6px;
+    }
+
+    select, input {
+      width:100%;
+      padding:12px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,0.3);
+      background: rgba(255,255,255,0.18);
+      color:#fff;
+      font-size:0.95rem;
+      outline:none;
+      transition: all .3s ease;
+    }
+
+    select:focus, input:focus {
+      border-color:#4ade80;
+      background: rgba(255,255,255,0.25);
+      box-shadow:0 0 6px #4ade80;
+    }
+
+    option { color:#000; }
+
+    button {
+      margin-top:20px;
+      width:100%;
+      padding:14px;
+      border:0;
+      border-radius:10px;
+      background: linear-gradient(135deg,#22c55e,#16a34a);
+      color:#fff;
+      font-weight:bold;
+      font-size:1rem;
+      cursor:pointer;
+      transition: all .3s ease;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+
+    button:hover {
+      background: linear-gradient(135deg,#16a34a,#15803d);
+      transform: translateY(-2px);
+    }
+
+    .msg-ok, .msg-err {
+      margin-top:14px;
+      padding:10px;
+      border-radius:8px;
+      text-align:center;
+      font-weight:600;
+    }
+    .msg-ok { background:rgba(34,197,94,0.2); color:#bbf7d0; border:1px solid #22c55e;}
+    .msg-err { background:rgba(239,68,68,0.2); color:#fecaca; border:1px solid #ef4444;}
+
+    p {text-align:center;margin-top:14px;}
+    a {color:#facc15;text-decoration:none;font-weight:500;}
+    a:hover {text-decoration:underline;}
+  </style>
+</head>
+<body>
+  <!-- Fondo rotatorio -->
+  <div class="background"></div>
+
+  <!-- Formulario -->
+  <div class="card">
+    <h1>Agendar Cita 📅</h1>
+
+    <form th:action="@{/citas/guardar}" th:object="${cita}" method="post">
+      <!-- CSRF -->
+      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+      <label>Mascota</label>
+      <div th:if="${#lists.isEmpty(mascotas)}">
+        <p style="color:#f87171;text-align:center;">
+          ⚠️ No tienes mascotas registradas.<br>
+          Registra una primero <a th:href="@{/mascotas/nueva}">aquí</a>.
+        </p>
+      </div>
+      <div th:unless="${#lists.isEmpty(mascotas)}">
+        <select name="mascota.id">
+          <option th:each="m : ${mascotas}" th:value="${m.id}" th:text="${m.nombre}"></option>
+        </select>
+      </div>
+
+      <label for="servicio">Servicio</label>
+      <select id="servicio" th:field="*{servicio.id}" required>
+        <option value="" disabled selected>— Selecciona —</option>
+        <option th:each="s : ${servicios}" th:value="${s.id}" th:text="${s.nombre}"></option>
+      </select>
+
+      <label for="veterinario">Veterinario</label>
+      <select id="veterinario" th:field="*{veterinario.id}">
+        <option value="">(Escoja un veterinario)</option>
+        <option th:each="v : ${veterinarios}" th:value="${v.id}" th:text="${v.nombre}"></option>
+      </select>
+
+      <label for="fechaCita">Fecha y Hora</label>
+      <select id="fechaCita" th:field="*{fechaCita}" required>
+        <option value="" disabled selected>— Selecciona —</option>
+        <option th:each="slot : ${horariosDisponibles}"
+                th:value="${slot}"
+                th:text="${#temporals.format(slot, 'dd/MM/yyyy HH:mm')}">
+        </option>
+      </select>
+
+      <button type="submit">Confirmar Cita ✅</button>
+    </form>
+
+    <div class="msg-ok" th:if="${ok}" th:text="${ok}"></div>
+    <div class="msg-err" th:if="${error}" th:text="${error}"></div>
+
+    <p><a th:href="@{/menu}">⬅ Volver al menú</a></p>
+  </div>
+</body>
+</html>

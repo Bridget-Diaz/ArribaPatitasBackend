@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Perfil de Usuario</title>
+    <meta charset="UTF-8">
+    <style>
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(to right, rgba(44, 62, 80, 0.9), rgba(52, 152, 219, 0.9)),
+                        url('https://images.unsplash.com/photo-1558788353-f76d92427f16') center/cover no-repeat;
+            color: #fff;
+            padding: 20px;
+        }
+
+        /* Tarjeta */
+        .profile-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 40px 50px;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        /* Animación entrada */
+        @keyframes fadeIn {
+            from {opacity: 0; transform: translateY(20px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+
+        /* Avatar Jsxdxd*/
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 20px;
+            border: 4px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+            transition: transform 0.3s ease;
+        }
+        .profile-avatar:hover {
+            transform: scale(1.08);
+        }
+
+        /* Rol */
+        .role-badge {
+            display: inline-block;
+            padding: 6px 18px;
+            background: rgba(52, 152, 219, 0.9);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 25px;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Información */
+        .profile-info {
+            text-align: left;
+            margin-top: 15px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 18px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.3);
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-weight: bold;
+            min-width: 130px;
+            color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-value {
+            flex: 1;
+            color: #fff;
+        }
+
+        /* Iconos */
+        .info-label::before {
+            content: '📌';
+            font-size: 1rem;
+        }
+        .info-label.email::before { content: '📧'; }
+        .info-label.name::before { content: '👤'; }
+        .info-label.phone::before { content: '📞'; }
+        .info-label.address::before { content: '🏠'; }
+
+        /* Botón volver */
+        .btn-volver {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 14px 30px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+
+        .btn-volver:hover {
+            background: linear-gradient(135deg, #2980b9, #1f618d);
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-card">
+        <!-- Avatar (si no hay imagen, solo cargar un inicial y no hay imagen p) -->
+        <div class="profile-avatar">
+            <span th:text="${usuario.cliente.nombre.substring(0,1)}">U</span>
+        </div>
+
+        <!-- Rol -->
+        <div class="role-badge" th:text="${rol}">ROL</div>
+
+        <!-- Info usuario -->
+        <div class="profile-info">
+            <div class="info-item">
+                <span class="info-label email">Correo:</span>
+                <span class="info-value" th:text="${usuario.email}">correo@ejemplo.com</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label name">Nombre:</span>
+                <span class="info-value" th:text="${usuario.cliente.nombre}">Nombre</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label phone">Teléfono:</span>
+                <span class="info-value" th:text="${usuario.cliente.telefono}">Teléfono</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label address">Dirección:</span>
+                <span class="info-value" th:text="${usuario.cliente.direccion}">Dirección</span>
+            </div>
+        </div>
+
+        <!-- Botón volver -->
+        <a th:href="@{/menu}" class="btn-volver">⬅ Volver al Menú</a>
+    </div>
+</body>
+</html>
