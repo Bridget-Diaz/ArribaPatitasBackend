@@ -1,167 +1,477 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
+
 <head>
-  <meta charset="UTF-8">
-  <title>Inscribir Mascota</title>
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Tahoma,sans-serif;}
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Patitas Felices 🐾 - Inscribir Mascota</title>
 
-    body {
-      min-height:100vh;
-      display:flex;
-      justify-content:flex-start;
-      align-items:center;
-      overflow:hidden;
-    }
+	<!-- Fuentes e íconos -->
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700;800&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
-    /* Fondo con imágenes rotatorias */
-    .background {
-      position: fixed;
-      top:0; left:0;
-      width:100%; height:100%;
-      z-index:-1;
-      background-size:cover;
-      background-position:center;
-      animation: cambiarFondo 20s infinite alternate;
-    }
+	<style>
+		:root {
+			--bg: #fef6ed;
+			--white: #fff;
+			--accent: #ff9800;
+			--text: #333;
+			--gray: #ccc;
+		}
 
-    @keyframes cambiarFondo {
-      0% { background-image: url("https://images.unsplash.com/photo-1601422931998-d14d7f0236df?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"); }
-      33% { background-image: url("https://images.unsplash.com/photo-1548767797-d8c844163c4c?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"); }
-      66% { background-image: url("https://images.unsplash.com/photo-1623387641168-d9803ddd3f35?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"); }
-      100% { background-image: url("https://plus.unsplash.com/premium_photo-1661503280224-a86d7ad2a574?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"); }
-    }
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
 
-    /* Caja del formulario */
-    .card {
-      background: rgba(255,255,255,0.12);
-      backdrop-filter: blur(12px);
-      border-radius: 18px;
-      padding: 36px;
-      width: 420px;
-      color:#fff;
-      box-shadow: 0 8px 28px rgba(0,0,0,0.4);
-      margin-left: 60px;
-      animation: slideUp .8s ease-out;
-    }
+		body {
+			font-family: "Poppins", sans-serif;
+			background: var(--bg);
+			color: var(--text);
+			line-height: 1.5;
+		}
 
-    @keyframes slideUp {
-      from {opacity:0; transform: translateY(30px);}
-      to {opacity:1; transform: translateY(0);}
-    }
+		a {
+			text-decoration: none;
+			color: inherit;
+		}
 
-    h1 {
-      text-align:center;
-      margin-bottom:20px;
-      font-size:1.7rem;
-      text-shadow:1px 1px 3px rgba(0,0,0,0.6);
-    }
+		/* ---------- HEADER ---------- */
+		/* ---------- HEADER (alineado estilo menú principal) ---------- */
+		header {
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			height: 72px;
+			background: var(--white);
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 0 34px;
+			box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+			z-index: 999;
+		}
 
-    label {
-      font-weight:600;
-      display:block;
-      margin-top:14px;
-      margin-bottom:6px;
-    }
+		/* ---------- BRAND ---------- */
+		.brand {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+		}
 
-    input, textarea, select {
-      width:100%;
-      padding:12px;
-      border-radius:10px;
-      border:1px solid rgba(255,255,255,0.3);
-      background: rgba(255,255,255,0.18);
-      color:#fff;
-      font-size:0.95rem;
-      outline:none;
-      transition: all .3s ease;
-    }
+		.brand .logo {
+			width: 44px;
+			height: 44px;
+			border-radius: 10px;
+			background: linear-gradient(135deg, var(--accent), #f58500);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+		}
 
-    input:focus, textarea:focus, select:focus {
-      border-color:#60a5fa;
-      background: rgba(255,255,255,0.28);
-      box-shadow:0 0 6px #3b82f6;
-    }
+		.brand .logo i {
+			color: #fff;
+			font-size: 18px;
+		}
 
-    .invalid {
-      border-color:#f87171 !important;
-      box-shadow:0 0 6px #ef4444;
-    }
+		.brand span {
+			font-weight: 700;
+			color: #222;
+			font-size: 18px;
+			letter-spacing: 0.6px;
+		}
 
-    textarea {resize:none;}
+		/* ---------- NAV ---------- */
+		nav ul {
+			display: flex;
+			list-style: none;
+			align-items: center;
+			gap: 26px;
+		}
 
-    button {
-      margin-top:22px;
-      width:100%;
-      padding:14px;
-      border:0;
-      border-radius:12px;
-      background: linear-gradient(135deg,#3b82f6,#2563eb);
-      color:#fff;
-      font-weight:600;
-      font-size:1rem;
-      cursor:pointer;
-      transition:all .3s ease;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.3);
-    }
+		nav ul li a {
+			font-weight: 600;
+			color: #222;
+			font-size: 14px;
+			transition: color 0.3s ease;
+		}
 
-    button:hover {
-      background: linear-gradient(135deg,#2563eb,#1d4ed8);
-      transform: translateY(-2px);
-    }
+		nav ul li a:hover {
+			color: var(--accent);
+		}
 
-    .msg-ok, .msg-err {
-      margin-top:14px;
-      padding:10px;
-      border-radius:8px;
-      text-align:center;
-      font-weight:600;
-    }
-    .msg-ok { background:rgba(34,197,94,0.2); color:#bbf7d0; border:1px solid #22c55e;}
-    .msg-err { background:rgba(239,68,68,0.2); color:#fecaca; border:1px solid #ef4444;}
+		/* ---------- BOTONES DE USUARIO ---------- */
+		.user-buttons {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+		}
 
-    p {text-align:center;margin-top:14px;}
-    a {color:#facc15;text-decoration:none;font-weight:500;}
-    a:hover {text-decoration:underline;}
-  </style>
+		.btn-login,
+		.btn-logout {
+			padding: 8px 16px;
+			border-radius: 22px;
+			font-weight: 700;
+			border: none;
+			cursor: pointer;
+			color: #fff;
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			transition: background 0.3s ease;
+		}
+
+		.btn-login {
+			background: var(--accent);
+		}
+
+		.btn-login:hover {
+			background: #f58500;
+		}
+
+		.btn-logout {
+			background: #dc3545;
+		}
+
+		.btn-logout:hover {
+			background: #c82333;
+		}
+
+		/* ---------- MAIN ---------- */
+		main {
+			margin-top: 120px;
+			padding: 40px 20px;
+			display: flex;
+			justify-content: center;
+		}
+
+		.form-container {
+			background: var(--white);
+			padding: 40px;
+			border-radius: 20px;
+			box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+			max-width: 700px;
+			width: 100%;
+		}
+
+		h3 {
+			text-align: center;
+			color: var(--accent);
+			font-size: 28px;
+			font-weight: 700;
+			margin-bottom: 24px;
+		}
+
+		form {
+			display: flex;
+			flex-direction: column;
+			gap: 16px;
+		}
+
+		label {
+			font-weight: 600;
+			font-size: 15px;
+		}
+
+		input,
+		select,
+		textarea {
+			width: 100%;
+			padding: 10px 14px;
+			border-radius: 10px;
+			border: 1px solid var(--gray);
+			font-size: 15px;
+			background: #fafafa;
+		}
+
+		textarea {
+			resize: none;
+		}
+
+		.form-container {
+			background-color: #f5f5f5;
+			padding: 30px;
+			border-radius: 15px;
+			width: 450px;
+			margin: 0 auto;
+			text-align: center;
+			box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+		}
+
+		.form-container h3 {
+			color: #ff9500;
+			margin-bottom: 20px;
+			font-weight: bold;
+		}
+
+		.form-group {
+			display: flex;
+			flex-direction: column;
+			text-align: left;
+			margin-bottom: 15px;
+		}
+
+		.form-group label {
+			font-weight: 600;
+			margin-bottom: 6px;
+			color: #444;
+		}
+
+		.form-group input,
+		.form-group textarea {
+			border: none;
+			border-radius: 8px;
+			padding: 10px;
+			background-color: #eaeaea;
+			outline: none;
+			font-size: 14px;
+		}
+
+		.form-row {
+			display: flex;
+			gap: 20px;
+		}
+
+		.btn-guardar {
+			background-color: #ff9500;
+			color: white;
+			border: none;
+			border-radius: 8px;
+			padding: 12px 25px;
+			font-weight: bold;
+			cursor: pointer;
+			margin-top: 10px;
+		}
+
+		.btn-guardar:hover {
+			background-color: #ffb74d;
+		}
+
+
+		.group {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+			gap: 14px;
+		}
+
+		button[type="submit"] {
+			margin-top: 20px;
+			padding: 12px;
+			background: var(--accent);
+			color: #fff;
+			font-weight: 700;
+			border: none;
+			border-radius: 25px;
+			cursor: pointer;
+			transition: 0.3s;
+		}
+
+		button[type="submit"]:hover {
+			background: #e68900;
+		}
+
+		.msg-ok {
+			margin-top: 12px;
+			color: #28a745;
+			font-weight: 600;
+			text-align: center;
+		}
+
+		.msg-err {
+			margin-top: 12px;
+			color: #d33;
+			font-weight: 600;
+			text-align: center;
+		}
+
+		/* ---------- FOOTER ---------- */
+		footer {
+			margin-top: 60px;
+			background: var(--accent);
+			padding: 30px 24px;
+			color: #fff;
+			border-top-left-radius: 20px;
+			border-top-right-radius: 20px;
+			text-align: center;
+			font-weight: 600;
+		}
+
+		@media (max-width: 680px) {
+			header {
+				padding: 0 16px;
+			}
+
+			nav ul {
+				display: none;
+			}
+
+			.form-container {
+				padding: 30px 20px;
+			}
+		}
+	</style>
+
 </head>
+
 <body>
-  <!-- Fondo rotatorio -->
-  <div class="background"></div>
+	<!-- HEADER -->
+	<header>
+		<div class="brand">
+			<div class="logo"><i class="fa-solid fa-paw"></i></div>
+			<span>Patitas Felices</span>
+		</div>
 
-  <!-- Formulario -->
-  <div class="card">
-    <h1>Inscribir Mascota 🐾</h1>
+		<nav>
+			<ul>
+				<li><a th:href="@{/menu}">INICIO</a></li>
+				<li><a th:href="@{/mascotas/nueva}">SERVICIOS</a></li>
+				<li><a th:href="@{/api/citas/listar}">MIS CITAS</a></li>
+				<li><a th:href="@{/galeria}">GALERÍA</a></li>
+			</ul>
+		</nav>
 
-    <form th:action="@{/mascotas/guardar}" th:object="${mascota}" method="post">
-      <!-- CSRF -->
-      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+		<div class="user-buttons" th:if="${#authorization.expression('isAuthenticated()')}">
+			<a th:href="@{/miperfil}">
+				<button class="btn-login"><i class="fas fa-user"></i> PERFIL</button>
+			</a>
+			<form th:action="@{/logout}" method="post" class="logout-form">
+				<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+				<button class="btn-logout" type="submit"><i class="fas fa-sign-out-alt"></i> SALIR</button>
+			</form>
+		</div>
+	</header>
 
-      <label for="nombre">Nombre</label>
-      <input id="nombre" type="text" th:field="*{nombre}" th:classappend="${#fields.hasErrors('nombre')} ? ' invalid'">
-      <div class="msg-err" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+	<!-- MAIN -->
+	<main>
+		<div class="form-container">
+			<h3>INSCRIBIR MASCOTA</h3>
 
-      <label for="especie">Especie</label>
-      <input id="especie" type="text" th:field="*{especie}">
+			<form th:action="@{/mascotas/guardar}" th:object="${mascota}" method="post">
+				<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
-      <label for="raza">Raza</label>
-      <input id="raza" type="text" th:field="*{raza}">
+				<div class="form-group">
+					<label for="nombre">Nombre</label>
+					<input id="nombre" type="text" placeholder="Ingresa el nombre de tu mascota" th:field="*{nombre}">
+				</div>
 
-      <label for="edad">Edad (años)</label>
-      <input id="edad" type="number" min="0" th:field="*{edad}">
+				<div class="form-row">
+					<div class="form-group">
+						<label for="raza">Raza</label>
+						<input id="raza" type="text" placeholder="Ej: Labrador" th:field="*{raza}">
+					</div>
 
-      <label for="peso">Peso (kg)</label>
-      <input id="peso" type="number" step="0.1" min="0" th:field="*{peso}">
+					<div class="form-group">
+						<label for="especie">Especie</label>
+						<input id="especie" type="text" placeholder="Ej: Perro, Gato" th:field="*{especie}">
+					</div>
+				</div>
 
-      <label for="observaciones">Observaciones</label>
-      <textarea id="observaciones" rows="3" th:field="*{observaciones}"></textarea>
+				<div class="form-row">
+					<div class="form-group">
+						<label for="peso">Peso (kg)</label>
+						<input id="peso" type="number" placeholder="Kg" step="0.1" min="0" th:field="*{peso}">
+					</div>
 
-      <button type="submit">Guardar Mascota</button>
-    </form>
+					<div class="form-group">
+						<label for="edad">Edad (años)</label>
+						<input id="edad" type="number" placeholder="Años" min="0" th:field="*{edad}">
+					</div>
+				</div>
 
-    <div class="msg-ok" th:if="${ok}" th:text="${ok}"></div>
-    <div class="msg-err" th:if="${error}" th:text="${error}"></div>
+				<div class="form-group">
+					<label for="observaciones">Observaciones</label>
+					<textarea id="observaciones" rows="3" placeholder="Ingresa observaciones"
+						th:field="*{observaciones}"></textarea>
+				</div>
 
-    <p><a th:href="@{/menu}">⬅ Volver al menú</a></p>
-  </div>
+				<button type="submit" class="btn-guardar">GUARDAR MASCOTA</button>
+
+				<div class="msg-err" th:if="${error}" th:text="${error}"></div>
+			</form>
+		</div>
+	</main>
+
+	<!-- FOOTER -->
+	<footer>
+		<p>© 2025 Patitas Felices 🐾 - Todos los derechos reservados</p>
+	</footer>
+
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", () => {
+			const form = document.querySelector("form[th\\:action='@{/mascotas/guardar}']");
+
+			if (form) {
+				form.addEventListener("submit", function (e) {
+					e.preventDefault(); // Evita el envío inmediato
+					Swal.fire({
+						title: "¡Inscripción de Mascota exitosa! 🐾",
+						text: "Tu mascota ha sido registrada correctamente.",
+						icon: "success",
+						confirmButtonColor: "#ff9800",
+						confirmButtonText: "Aceptar"
+					}).then(() => {
+						// Luego de cerrar la alerta, envía el formulario
+						e.target.submit();
+					});
+				});
+			}
+		});
+	</script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", () => {
+			const form = document.querySelector("form[action='/mascotas/guardar']"); // ✅ Selector correcto
+
+			if (form) {
+				form.addEventListener("submit", function (e) {
+					e.preventDefault(); // Evita el envío inmediato
+					Swal.fire({
+						title: "¡Inscripción exitosa! 🐾",
+						text: "Tu mascota ha sido registrada correctamente.",
+						icon: "success",
+						confirmButtonColor: "#ff9800",
+						confirmButtonText: "Aceptar"
+					}).then(() => {
+						e.target.submit();
+					});
+				});
+			}
+		});
+	</script>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", () => {
+			const logoutForm = document.querySelector(".logout-form");
+
+			if (logoutForm) {
+				logoutForm.addEventListener("submit", function (e) {
+					e.preventDefault();
+
+					Swal.fire({
+						title: "¿Seguro que deseas salir?",
+						icon: "warning",
+						showCancelButton: true,
+						confirmButtonColor: "#dc3545",
+						cancelButtonColor: "#6c757d",
+						confirmButtonText: "Sí, salir",
+						cancelButtonText: "Cancelar"
+					}).then((result) => {
+						if (result.isConfirmed) {
+							e.target.submit(); // Cierra sesión
+						}
+					});
+				});
+			}
+		});
+	</script>
+
+	</script>
 </body>
+
 </html>
