@@ -23,8 +23,6 @@ import com.superpet.ProyectoSuperpet.service.MascotaService;
 import com.superpet.ProyectoSuperpet.service.ServicioService;
 import com.superpet.ProyectoSuperpet.service.UsuarioService;
 import com.superpet.ProyectoSuperpet.service.VeterinarioService;
-
-//agregado para cita
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
