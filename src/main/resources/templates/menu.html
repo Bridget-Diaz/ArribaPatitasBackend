@@ -575,14 +575,15 @@
 			<span>Patitas Felices</span>
 		</div>
 
-		<nav>
-			<ul>
-				<li><a href="#hero">INICIO</a></li>
-				<li><a href="#acciones">SERVICIOS</a></li>
-				<li><a href="#citas">MIS CITAS</a></li>
-				<li><a href="#galeria">GALERÍA</a></li>
-			</ul>
-		</nav>
+        <nav>
+            <ul>
+                <li><a href="#hero">INICIO</a></li>
+                <li><a href="#acciones">ACCIONES</a></li>
+                <li><a href="#citas">MIS CITAS</a></li>
+                <li><a href="#galeria">GALERÍA</a></li>
+				<li><a th:href="@{/mis-citas}">MIS CITAS</a></li>
+            </ul>
+        </nav>
 
 		<div class="header-buttons">
 			<!-- Usuario autenticado -->
@@ -652,43 +653,6 @@
 						<p>Solicita una nueva cita para cualquiera de tus mascotas</p>
 						<a th:href="@{/citas/nueva}">
 							<button class="btn-action">Agendar Cita</button>
-						</a>
-					</div>
-				</div>
-			</div>
-		</section>
-
-		<!-- APPOINTMENTS SECTION -->
-		<section id="citas" class="appointments-section" aria-label="mis-citas">
-			<div class="appointments-title">
-				Próximas Citas
-			</div>
-
-			<div class="appointments-platform">
-				<h2>MIS CITAS PROGRAMADAS</h2>
-
-				<div class="appointments-list">
-					<div th:if="${citas != null and !citas.empty}">
-						<div th:each="cita : ${citas}" class="appointment-item">
-							<div class="appointment-date">
-								<i class="fas fa-calendar-day"></i>
-								<span th:text="${cita.fecha}">Fecha de la cita</span>
-							</div>
-							<div class="appointment-service">
-								<i class="fas fa-stethoscope"></i>
-								<span th:text="${cita.servicio?.nombre}">Servicio</span>
-							</div>
-							<div th:if="${cita.mascota != null}">
-								<i class="fas fa-paw"></i>
-								<span th:text="${cita.mascota.nombre}">Mascota</span>
-							</div>
-						</div>
-					</div>
-					<div th:if="${citas == null or citas.empty}" class="no-appointments">
-						<i class="fas fa-calendar-times" style="font-size: 48px; margin-bottom: 20px;"></i>
-						<p>No tienes citas programadas</p>
-						<a th:href="@{/citas/nueva}">
-							<button class="btn-action" style="margin-top: 15px;">Agendar Primera Cita</button>
 						</a>
 					</div>
 				</div>
