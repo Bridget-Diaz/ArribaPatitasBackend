@@ -25,18 +25,19 @@ public class MascotaVISTACONTROLADOR {
 	private UsuarioService usuarService;
 	
   
-  @PostMapping("/guardar")
-  public String guardarMascota(@ModelAttribute Mascota mascota ,Authentication auth ) {
-  	String email = auth.getName();
-  	Usuario usuario = usuarService.buscarPorEmail(email);
-  //vincular mascota con el cliente de la cuenta
-  	mascota.setCliente(usuario.getCliente());
-  	mascoServiec.guardarMascota(mascota);
-  	return"form_mascota";
-  }
-  
-  
-  
+	@PostMapping("/guardar")
+	public String guardarMascota(@ModelAttribute Mascota mascota, 
+	                             Authentication auth, 
+	                             Model model) {
+	    String email = auth.getName();
+	    Usuario usuario = usuarService.buscarPorEmail(email);
+	    mascota.setCliente(usuario.getCliente());
+	    mascoServiec.guardarMascota(mascota);
+	    model.addAttribute("mensajeExito", "Mascota registrada correctamente 🐶");
+	    model.addAttribute("mascota", new Mascota());
+	    return "form_mascota"; 
+	}
+
   
   @GetMapping("/nueva")
   public String mostrarFormularioMascota(Model model) {

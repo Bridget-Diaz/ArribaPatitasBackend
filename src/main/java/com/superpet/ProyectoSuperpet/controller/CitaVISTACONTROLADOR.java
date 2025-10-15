@@ -23,6 +23,8 @@ import com.superpet.ProyectoSuperpet.service.MascotaService;
 import com.superpet.ProyectoSuperpet.service.ServicioService;
 import com.superpet.ProyectoSuperpet.service.UsuarioService;
 import com.superpet.ProyectoSuperpet.service.VeterinarioService;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 
 @Controller
 @RequestMapping("/citas")
@@ -74,7 +76,7 @@ public class CitaVISTACONTROLADOR {
 
 
 	    @PostMapping("/guardar")
-	    public String guardarCita(@ModelAttribute Cita cita, Authentication auth) {
+	    public String guardarCita(@ModelAttribute Cita cita, Authentication auth, RedirectAttributes redirectAttrs) {
 	        String email = auth.getName();
 	        Usuario usuario = usuarioService.buscarPorEmail(email);
 
@@ -82,6 +84,11 @@ public class CitaVISTACONTROLADOR {
 	        cita.setEstado("Pendiente");
 	        citaService.guardarCita(cita);
 
-	        return "redirect:/menu";
+	        // 🔸 Mandar mensaje de éxito
+	        redirectAttrs.addFlashAttribute("mensajeExito", "Cita registrada correctamente");
+
+	        // 🔸 Redirigir nuevamente al formulario (o a la lista si prefieres)
+	        return "redirect:/citas/nueva";
 	    }
+
 }
