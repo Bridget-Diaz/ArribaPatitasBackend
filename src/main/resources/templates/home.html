@@ -189,7 +189,7 @@
             box-shadow:0 6px 30px rgba(0,0,0,0.08);
         }
 
-        /* 3D ring under info */
+        /* 3D ring under info 
         .info-platform::after{
             content:"";
             position:absolute;
@@ -200,7 +200,7 @@
             background:linear-gradient(#ffffff,#e9e9ec);
             border-radius:50%;
             z-index:-2;
-        }
+        }*/
         .info-platform::before{
             content:"";
             position:absolute;left:50%;transform:translateX(-50%);
@@ -334,13 +334,14 @@
 		    transform: scale(1.08); /* pequeño zoom al pasar el mouse */
 		}
 
+		/*
         .gallery-platform::after{
             content:"";
             position:absolute;left:50%;transform:translateX(-50%);
             bottom:-86px;
             width:95%;height:120px;background:linear-gradient(#ededf1,#e7e7ea);
             border-radius:50%;z-index:-2;
-        }
+        }*/
         .gallery-platform::before{
             content:"";
             position:absolute;left:50%;transform:translateX(-50%);
@@ -565,7 +566,7 @@
 		<section id="registrarse" class="register-wrap" aria-label="registro">
 		    <div class="register-left">
 		        <div class="register-title">REGÍSTRATE</div>
-		        <div class="small-muted">Rellena tus datos para registrar a tu mascota</div>
+		        <div class="small-muted">Rellena tus datos para acceder a nuestros servicios</div>
 
 		        <!-- Formulario SIN th:action temporalmente -->
 		        <form action="/registro" method="post" style="max-width:520px;">

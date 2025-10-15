@@ -24,7 +24,6 @@ public class MascotaVISTACONTROLADOR {
 	@Autowired
 	private UsuarioService usuarService;
 	
-	 //aca esto se agrego
   
   @PostMapping("/guardar")
   public String guardarMascota(@ModelAttribute Mascota mascota ,Authentication auth ) {
@@ -33,7 +32,7 @@ public class MascotaVISTACONTROLADOR {
   //vincular mascota con el cliente de la cuenta
   	mascota.setCliente(usuario.getCliente());
   	mascoServiec.guardarMascota(mascota);
-  	return"redirect:/miperfil";
+  	return"form_mascota";
   }
   
   
