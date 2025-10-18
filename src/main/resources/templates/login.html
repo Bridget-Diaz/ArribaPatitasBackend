@@ -3,146 +3,266 @@
 <head>
     <title>Login - Superpet</title>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <style>
+        :root {
+            --bg-light-start: #FF9800;
+            --accent: #FF5722;
+            --text-dark: #333333;
+            --form-bg: rgba(255, 152, 0, 0.9);
+            --white: #ffffff; 
+            --dark-button: #444444; 
+            --text-light: var(--white); 
+            --bg-yellow-corner: #FFC107; 
+            --fallback-grey: #f0f0f0; 
+            --main-title-dark: #3a3a3a;
+        }
+
         body {
-          margin: 0;
-          padding: 0;
-          font-family: Arial, sans-serif;
-          background: url("https://plus.unsplash.com/premium_photo-1661942274165-00cc8d55a93f?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0") 
-                      no-repeat center center fixed;
-          background-size: cover;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: 100vh;
+            margin: 0;
+            padding: 0;
+            display: flex; 
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            height: 100vh;
+            width: 100%;
+            font-family: "Poppins", sans-serif; 
+            overflow: hidden;
+            position: relative;
+            
+            padding-top: 15vh;
+            
+            background-color: var(--fallback-grey); 
+            
+            background: url("https://i.pinimg.com/736x/6e/78/af/6e78af0c0d8cda9d90b5b6e99a7cff5b.jpg") no-repeat center center fixed; 
+            background-size: cover;
+            filter: brightness(0.95);
+        }
+        
+        .main-logo-title {
+            position: relative;
+            z-index: 10;
+            margin-bottom: 45px; 
+            color: var(--main-title-dark);
+            font-size: 50px; 
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4); 
+            line-height: 1;
+            text-align: center;
         }
 
-        .contenedor {
-          background: rgba(255, 255, 255, 0.2);
-          backdrop-filter: blur(10px);
-          padding: 30px 40px;
-          border-radius: 20px;
-          box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
-          width: 350px;
-          text-align: center;
+        .main-logo-title .accent-text {
+            color: var(--bg-light-start);
+            font-weight: 800;
+            letter-spacing: 2px;
         }
 
-        h2 {
-          color: #4caf50;
-          margin-bottom: 20px;
-          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        @media (max-width: 600px) {
+            .main-logo-title {
+                font-size: 40px;
+                margin-bottom: 25px;
+            }
+            body {
+                padding-top: 15vh;
+            }
         }
 
-        label {
-          display: block;
-          text-align: left;
-          margin-bottom: 5px;
-          font-weight: bold;
-          color: #333;
+        .brand-fixed {
+            display: none;
+        }
+        .brand-fixed .logo-icon, .brand-fixed span {
+             text-shadow: none;
         }
 
-        input[type="text"],
-        input[type="password"] {
-          width: 100%;
-          padding: 10px;
-          margin-bottom: 15px;
-          border-radius: 8px;
-          border: 1px solid #ccc;
-          outline: none;
-          font-size: 14px;
+        .login-container {
+            max-width: 350px; 
+            width: 90%; 
+            padding: 40px 30px 30px; 
+            background-color: var(--form-bg); 
+            backdrop-filter: blur(5px); 
+            border-radius: 15px; 
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5); 
+            text-align: center;
+            position: relative; 
+            z-index: 10; 
+            animation: slideIn 0.6s ease-out; 
+            border: none;
         }
 
-        input[type="text"]:focus,
-        input[type="password"]:focus {
-          border-color: #4caf50;
-          box-shadow: 0px 0px 5px rgba(76, 175, 80, 0.5);
+        .paw-icon-top {
+            display: flex; 
+            position: absolute;
+            top: -15px; 
+            right: -15px; 
+            width: 50px; 
+            height: 50px;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: var(--bg-light-start); 
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            transform: rotate(10deg); 
+            z-index: 12;
+        }
+        .paw-icon-top i {
+            color: var(--text-dark); 
+            font-size: 22px;
         }
 
-        .btn button {
-          background-color: #4caf50;
-          color: white;
-          padding: 12px;
-          width: 100%;
-          border: none;
-          border-radius: 8px;
-          cursor: pointer;
-          font-size: 16px;
-          font-weight: bold;
-          transition: 0.3s;
+
+        .login-container h2 {
+            margin-top: 5px; 
+            margin-bottom: 25px; 
+            color: var(--text-light); 
+            font-size: 20px; 
+            font-weight: 700; 
+            letter-spacing: 0.5px;
+            text-transform: uppercase; 
         }
 
-        .btn button:hover {
-          background-color: #388e3c;
+        .form-field-label {
+            display: block;
+            text-align: left;
+            font-size: 13px; 
+            font-weight: 600; 
+            color: var(--text-light); 
+            margin-bottom: 5px;
+            margin-top: 15px; 
+            text-transform: uppercase;
         }
 
-        p {
-          margin-top: 10px;
-          font-size: 14px;
+        .login-container form :first-child .form-field-label {
+             margin-top: 0;
+        }
+        
+        .login-container input {
+            width: 90%;
+            padding: 12px 15px; 
+            margin-bottom: 0; 
+            border: none; 
+            background: var(--white); 
+            border-radius: 8px; 
+            font-size: 15px; 
+            font-weight: 500;
+            color: var(--text-dark); 
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset; 
         }
 
+        .login-container input:focus {
+            background: var(--white);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset, 0 0 0 2px var(--accent); 
+            outline: none;
+        }
+
+        .login-container button {
+            width: 100%;
+            padding: 12px; 
+            background-color: var(--dark-button); 
+            color: var(--white); 
+            border: none; 
+            border-radius: 8px; 
+            font-size: 16px;
+            font-weight: 700; 
+            cursor: pointer;
+            margin-top: 30px; 
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
+            transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+        }
+
+        .login-container button:hover {
+            background-color: #333333; 
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+        
+        .login-message {
+            margin-top: 15px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-light); 
+        }
+        
         .register-link {
-          display: inline-block;
-          margin-top: 15px;
-          font-size: 14px;
-          color: #4caf50;
-          text-decoration: none;
-          font-weight: bold;
-          transition: 0.3s;
+            display: inline-block;
+            margin-top: 15px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--bg-yellow-corner); 
+            text-decoration: none;
+            transition: 0.3s;
         }
 
         .register-link:hover {
-          color: #2e7d32;
-          text-decoration: underline;
+            color: var(--white);
+            text-decoration: underline;
+        }
+
+        .paw-container { 
+            display: none; 
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
     </style>
 </head>
 <body>
-  <div class="contenedor">
-      <h2>🐾 Iniciar Sesión</h2>
+    
+    <div class="paw-container" style="display:none;">
+    </div>
 
-      <form th:action="@{/login}" method="post">
-          <div class="p_usuario">
-              <label>Usuario:</label>
-              <input type="text" name="username" required />
-          </div>
-          <div class="p_contrasena">
-              <label>Contraseña:</label>
-              <input type="password" name="password" required />
-          </div>
-          <div class="btn">
-              <button type="submit">Ingresar</button>
-          </div>
-      </form>
+    <div class="main-logo-title">
+        <span>PATITAS</span>
+        <span class="accent-text">FELICES</span>
+    </div>
 
-      <p th:if="${param.error}">⚠️ Usuario o contraseña incorrectos</p>
-      <p th:if="${param.logout}">👋 Sesión cerrada con éxito</p>
+    <div class="login-container">
+        <div class="paw-icon-top">
+            <i class="fas fa-paw"></i>
+        </div>
+        
+        <h2>INICIAR SESIÓN</h2>
 
-      <a th:href="@{/registro}" class="register-link">¿No tienes cuenta? Regístrate aquí</a>
-  </div>
+        <form th:action="@{/login}" method="post">
+            <div>
+                <label class="form-field-label">Usuario:</label>
+                <input type="text" name="username" required />
+            </div>
+            <div>
+                <label class="form-field-label">Contraseña:</label>
+                <input type="password" name="password" required />
+            </div>
+            <div class="btn">
+                <button type="submit">INGRESAR</button>
+            </div>
+        </form>
+
+        <p th:if="${param.error}" class="login-message">
+            ⚠️ Usuario o contraseña incorrectos
+        </p>
+        <p th:if="${param.logout}" class="login-message">
+            👋 Sesión cerrada con éxito
+        </p>
+
+        <a th:href="@{/registro}" class="register-link">¿No tienes cuenta? Regístrate aquí</a>
+    </div>
   
-  <!--ESTO ES PARA EL REGISTRO !NO BORRAR - DE CIELO¡-->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-  <!-- Mostrar alerta si el registro fue exitoso -->
-  <script th:if="${registroExitoso}">
-      Swal.fire({
-          icon: 'success',
-          title: '¡Registro exitoso!',
-          text: 'Ahora puedes iniciar sesión en tu cuenta 😊',
-          confirmButtonColor: '#3085d6',
-          confirmButtonText: 'Entendido'
-      });
-  </script>
-  
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script th:if="${registroExitoso}">
-    Swal.fire({
-      icon: 'success',
-      title: '¡Registro exitoso!',
-      text: 'Inicia sesión usando tus credenciales.',
-      timer: 3000,
-      showConfirmButton: false
-    });
-  </script>
+    <script th:if="${registroExitoso}">
+        Swal.fire({
+            icon: 'success',
+            title: '¡Registro exitoso!',
+            text: 'Inicia sesión usando tus credenciales.',
+            timer: 3000,
+            showConfirmButton: false
+        });
+    </script>
 </body>
 </html>

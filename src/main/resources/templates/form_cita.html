@@ -195,14 +195,12 @@
             <span>Patitas Felices</span>
         </div>
 
-        <nav>
-            <ul>
-                <li><a th:href="@{/menu}">INICIO</a></li>
-                <li><a th:href="@{/mascotas/nueva}">INSCRIBIR</a></li>
-                <li><a th:href="@{/citas/nueva}">CITAS</a></li>
+		<nav>
+		    <ul>
+		        <li><a href="@{/menu}">SERVICIOS</a></li>
 				<li><a th:href="@{/mis-citas}">MIS CITAS</a></li>
-            </ul>
-        </nav>
+		    </ul>
+		</nav>
 
         <div class="header-buttons">
             <div th:if="${#authorization.expression('isAuthenticated()')}" style="display:flex;align-items:center;gap:10px;">

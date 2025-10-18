@@ -89,12 +89,10 @@
         <span>Patitas Felices</span>
     </div>
     <nav>
-        <ul>
-            <li><a th:href="@{/menu}">INICIO</a></li>
-            <li><a th:href="@{/mascotas/nueva}">MASCOTAS</a></li>
-            <li><a th:href="@{/citas/nueva}">AGENDAR CITA</a></li>
-            <li><a th:href="@{/mis-citas}" style="color:var(--accent);">MIS CITAS</a></li>
-        </ul>
+		<ul>
+		    <li><a href="@{/menu}">SERVICIOS</a></li>
+			<li><a th:href="@{/mis-citas}">MIS CITAS</a></li>
+		</ul>
     </nav>
     <div class="header-buttons">
         <div th:if="${#authorization.expression('isAuthenticated()')}" style="display:flex;align-items:center;gap:10px;">
@@ -144,14 +142,12 @@
     <div class="footer-grid">
         <div class="footer-col">
             <h4>Navegación</h4>
-            <ul>
-                <li><a th:href="@{/menu}">Inicio</a></li>
-                <li><a th:href="@{/mascotas/nueva}">Mascotas</a></li>
-                <li><a th:href="@{/citas/nueva}">Nueva Cita</a></li>
-                <li><a th:href="@{/mis-citas}">Mis Citas</a></li>
-            </ul>
+			<ul>
+			    <li><a href="@{/menu}">SERVICIOS</a></li>
+				<li><a th:href="@{/mis-citas}">MIS CITAS</a></li>
+			</ul>
         </div>
-
+		
         <div class="footer-col">
             <h4>Contacto</h4>
             <ul>
