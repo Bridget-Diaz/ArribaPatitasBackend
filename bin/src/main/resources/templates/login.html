@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login - Superpet</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+          margin: 0;
+          padding: 0;
+          font-family: Arial, sans-serif;
+          background: url("https://plus.unsplash.com/premium_photo-1661942274165-00cc8d55a93f?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0") 
+                      no-repeat center center fixed;
+          background-size: cover;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+        }
+
+        .contenedor {
+          background: rgba(255, 255, 255, 0.2);
+          backdrop-filter: blur(10px);
+          padding: 30px 40px;
+          border-radius: 20px;
+          box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+          width: 350px;
+          text-align: center;
+        }
+
+        h2 {
+          color: #4caf50;
+          margin-bottom: 20px;
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        label {
+          display: block;
+          text-align: left;
+          margin-bottom: 5px;
+          font-weight: bold;
+          color: #333;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+          width: 100%;
+          padding: 10px;
+          margin-bottom: 15px;
+          border-radius: 8px;
+          border: 1px solid #ccc;
+          outline: none;
+          font-size: 14px;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+          border-color: #4caf50;
+          box-shadow: 0px 0px 5px rgba(76, 175, 80, 0.5);
+        }
+
+        .btn button {
+          background-color: #4caf50;
+          color: white;
+          padding: 12px;
+          width: 100%;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+          font-size: 16px;
+          font-weight: bold;
+          transition: 0.3s;
+        }
+
+        .btn button:hover {
+          background-color: #388e3c;
+        }
+
+        p {
+          margin-top: 10px;
+          font-size: 14px;
+        }
+
+        .register-link {
+          display: inline-block;
+          margin-top: 15px;
+          font-size: 14px;
+          color: #4caf50;
+          text-decoration: none;
+          font-weight: bold;
+          transition: 0.3s;
+        }
+
+        .register-link:hover {
+          color: #2e7d32;
+          text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+  <div class="contenedor">
+      <h2>🐾 Iniciar Sesión</h2>
+
+      <form th:action="@{/login}" method="post">
+          <div class="p_usuario">
+              <label>Usuario:</label>
+              <input type="text" name="username" required />
+          </div>
+          <div class="p_contrasena">
+              <label>Contraseña:</label>
+              <input type="password" name="password" required />
+          </div>
+          <div class="btn">
+              <button type="submit">Ingresar</button>
+          </div>
+      </form>
+
+      <p th:if="${param.error}">⚠️ Usuario o contraseña incorrectos</p>
+      <p th:if="${param.logout}">👋 Sesión cerrada con éxito</p>
+
+      <a th:href="@{/registro}" class="register-link">¿No tienes cuenta? Regístrate aquí</a>
+  </div>
+  
+  <!--ESTO ES PARA EL REGISTRO !NO BORRAR - DE CIELO¡-->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- Mostrar alerta si el registro fue exitoso -->
+  <script th:if="${registroExitoso}">
+      Swal.fire({
+          icon: 'success',
+          title: '¡Registro exitoso!',
+          text: 'Ahora puedes iniciar sesión en tu cuenta 😊',
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'Entendido'
+      });
+  </script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script th:if="${registroExitoso}">
+    Swal.fire({
+      icon: 'success',
+      title: '¡Registro exitoso!',
+      text: 'Inicia sesión usando tus credenciales.',
+      timer: 3000,
+      showConfirmButton: false
+    });
+  </script>
+</body>
+</html>

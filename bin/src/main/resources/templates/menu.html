@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Patitas Felices 🐾 - Menú</title>
+
+	<!-- Fonts + icons -->
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700;800&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+	<style>
+		:root {
+			--bg-dark: #fef6ed;
+			--white: #ffffff;
+			--light-gray: #ededf1;
+			--accent: #ff9800;
+			--muted: #bdbdbd;
+			--text-dark: #333333;
+		}
+
+		/* Reset */
+		* {
+			box-sizing: border-box;
+			margin: 0;
+			padding: 0
+		}
+
+		html,
+		body {
+			height: 100%
+		}
+
+		body {
+			font-family: "Poppins", sans-serif;
+			background: var(--bg-dark);
+			color: var(--text-dark);
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+			line-height: 1.4;
+		}
+
+		a {
+			color: inherit;
+			text-decoration: none
+		}
+
+		img {
+			max-width: 100%;
+			display: block
+		}
+
+		/* ---------- NAV (fixed) ---------- */
+		header {
+			position: fixed;
+			left: 0;
+			right: 0;
+			top: 0;
+			height: 72px;
+			z-index: 999;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 0 34px;
+			background: var(--white);
+			box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+		}
+
+		.brand {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+		}
+
+		.brand .logo {
+			width: 44px;
+			height: 44px;
+			border-radius: 10px;
+			background: linear-gradient(135deg, var(--accent), #f58500);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+		}
+
+		.brand .logo i {
+			color: #fff;
+			font-size: 18px
+		}
+
+		.brand span {
+			font-weight: 700;
+			color: #222;
+			font-size: 18px;
+			letter-spacing: 0.6px
+		}
+
+		nav ul {
+			display: flex;
+			gap: 26px;
+			list-style: none;
+			align-items: center;
+		}
+
+		nav ul li a {
+			font-weight: 600;
+			color: #222;
+			font-size: 14px
+		}
+
+		nav ul li a:hover {
+			color: var(--accent)
+		}
+
+		.btn-login {
+			background: var(--accent);
+			color: #fff;
+			padding: 8px 16px;
+			border-radius: 22px;
+			font-weight: 700;
+			border: none;
+			cursor: pointer;
+			margin-left: 10px;
+		}
+
+		.btn-logout {
+			background: #dc3545;
+			color: #fff;
+			padding: 8px 16px;
+			border-radius: 22px;
+			font-weight: 700;
+			border: none;
+			cursor: pointer;
+			margin-left: 10px;
+		}
+
+		/* ---------- Hero (white platform) ---------- */
+		.hero-wrap {
+			margin-top: 72px;
+			display: flex;
+			justify-content: center;
+			position: relative;
+			z-index: 1;
+		}
+
+		.hero-platform {
+			width: 100%;
+			max-width: 820px;
+			background: var(--white);
+			border-radius: 28px;
+			margin-top: 24px;
+			text-align: center;
+			padding: 36px 28px 46px;
+			position: relative;
+			overflow: visible;
+		}
+
+		.hero-platform h1 {
+			font-size: 48px;
+			letter-spacing: 1px;
+			margin-bottom: 6px;
+			font-weight: 800;
+		}
+
+		.hero-platform h1 span {
+			color: var(--accent)
+		}
+
+		.welcome-message {
+			font-size: 20px;
+			color: var(--accent);
+			font-weight: 600;
+			margin: 15px 0;
+		}
+
+		.user-role {
+			background: var(--accent);
+			color: white;
+			padding: 6px 16px;
+			border-radius: 20px;
+			font-size: 14px;
+			font-weight: 600;
+			display: inline-block;
+			margin: 10px 0;
+		}
+
+		.hero-platform .paw-icon {
+			display: inline-block;
+			margin: 14px 0 10px;
+			color: var(--accent);
+			font-size: 22px;
+		}
+
+		.hero-animals {
+			margin-top: 14px;
+			width: 100%;
+			display: block;
+			object-fit: cover;
+			border-radius: 10px;
+		}
+
+		/* '3D base' under the platform 
+		.hero-platform::after {
+			content: "";
+			position: absolute;
+			left: 50%;
+			transform: translateX(-50%);
+			bottom: -70px;
+			width: 94%;
+			height: 120px;
+			background: linear-gradient(#ededf1, #e7e7ea);
+			border-radius: 50%;
+			z-index: -2;
+			box-shadow: 0 14px 0 rgba(0, 0, 0, 0.06) inset;
+		}*/
+
+		.hero-platform::before {
+			content: "";
+			position: absolute;
+			left: 50%;
+			transform: translateX(-50%);
+			bottom: -31px;
+			width: 100%;
+			height: 46px;
+			background: rgba(0, 0, 0, 0.06);
+			border-radius: 50%;
+			z-index: -3;
+		}
+
+		/* ---------- User Actions Platform ---------- */
+		.user-actions-section {
+			position: relative;
+			margin-top: 110px;
+		}
+
+		.user-actions-platform {
+			max-width: 920px;
+			margin: 0 auto;
+			background: var(--light-gray);
+			border-radius: 28px;
+			padding: 56px 42px;
+			text-align: center;
+			position: relative;
+			z-index: 3;
+		}
+
+		.user-actions-platform h2 {
+			font-size: 36px;
+			color: #3a3a3a;
+			font-weight: 800;
+			margin-bottom: 18px;
+		}
+
+		.user-actions-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+			gap: 30px;
+			margin-top: 40px;
+		}
+
+		.user-action-card {
+			background: var(--white);
+			border-radius: 18px;
+			padding: 30px;
+			text-align: center;
+			box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+			transition: transform 0.3s ease;
+		}
+
+		.user-action-card:hover {
+			transform: translateY(-5px);
+		}
+
+		.user-action-icon {
+			width: 70px;
+			height: 70px;
+			background: linear-gradient(135deg, var(--accent), #f58500);
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin: 0 auto 20px;
+		}
+
+		.user-action-icon i {
+			color: white;
+			font-size: 24px;
+		}
+
+		.user-action-card h3 {
+			font-size: 20px;
+			font-weight: 700;
+			margin-bottom: 15px;
+			color: var(--text-dark);
+		}
+
+		.user-action-card p {
+			color: #666;
+			margin-bottom: 20px;
+			line-height: 1.5;
+		}
+
+		.btn-action {
+			background: var(--accent);
+			color: white;
+			border: none;
+			padding: 10px 24px;
+			border-radius: 25px;
+			font-weight: 600;
+			cursor: pointer;
+			transition: background 0.3s ease;
+		}
+
+		.btn-action:hover {
+			background: #e68900;
+		}
+
+		/* 3D ring under user actions 
+		.user-actions-platform::after {
+			content: "";
+			position: absolute;
+			left: 50%;
+			transform: translateX(-50%);
+			bottom: -80px;
+			width: 86%;
+			height: 110px;
+			background: linear-gradient(#ffffff, #e9e9ec);
+			border-radius: 50%;
+			z-index: -2;
+		}*/
+
+		.user-actions-platform::before {
+			content: "";
+			position: absolute;
+			left: 50%;
+			transform: translateX(-50%);
+			bottom: -100px;
+			width: 92%;
+			height: 36px;
+			background: rgba(0, 0, 0, 0.06);
+			border-radius: 50%;
+			z-index: -3;
+		}
+
+		/* ---------- Appointments Section ---------- */
+		.appointments-section {
+			margin-top: 140px;
+			text-align: center;
+			padding: 48px 18px 18px;
+		}
+
+		.appointments-title {
+			color: var(--muted);
+			font-size: 20px;
+			margin-bottom: 22px;
+			font-weight: 800;
+		}
+
+		.appointments-platform {
+			max-width: 960px;
+			margin: 0 auto;
+			background: var(--white);
+			border-radius: 28px;
+			padding: 42px 28px;
+			position: relative;
+		}
+
+		.appointments-platform h2 {
+			font-size: 34px;
+			color: var(--text-dark);
+			font-weight: 800;
+			margin-bottom: 26px;
+		}
+
+		.appointments-list {
+			text-align: left;
+		}
+
+		.appointment-item {
+			background: var(--light-gray);
+			border-radius: 12px;
+			padding: 20px;
+			margin-bottom: 15px;
+			border-left: 4px solid var(--accent);
+		}
+
+		.appointment-date {
+			font-weight: 700;
+			color: var(--accent);
+			margin-bottom: 5px;
+		}
+
+		.appointment-service {
+			font-weight: 600;
+			color: var(--text-dark);
+		}
+
+		.no-appointments {
+			text-align: center;
+			color: var(--muted);
+			font-style: italic;
+			padding: 40px;
+		}
+
+		/* ---------- Gallery platform ---------- */
+		.gallery-wrap {
+			margin-top: 80px;
+			position: relative;
+			padding-bottom: 0;
+		}
+
+		.gallery-platform {
+			max-width: 960px;
+			margin: 0 auto;
+			background: var(--white);
+			border-radius: 28px;
+			padding: 42px 28px 90px;
+			text-align: center;
+			position: relative;
+		}
+
+		.gallery-platform h2 {
+			font-size: 34px;
+			color: var(--text-dark);
+			font-weight: 800;
+			margin-bottom: 26px
+		}
+
+		.gallery-grid {
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			gap: 18px;
+			align-items: start;
+		}
+
+		.gallery-grid .tile {
+			aspect-ratio: 1 / 1;
+			border-radius: 10px;
+			overflow: hidden;
+			position: relative;
+			box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+			background: #f6f6f6;
+		}
+
+		.gallery-grid .tile img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			transition: transform 0.3s ease;
+		}
+
+		.gallery-grid .tile img:hover {
+			transform: scale(1.08);
+		}
+
+		.gallery-platform::after {
+			content: "";
+			position: absolute;
+			left: 50%;
+			transform: translateX(-50%);
+			bottom: -86px;
+			width: 95%;
+			height: 120px;
+			background: linear-gradient(#ededf1, #e7e7ea);
+			border-radius: 50%;
+			z-index: -2;
+		}
+
+		.gallery-platform::before {
+			content: "";
+			position: absolute;
+			left: 50%;
+			transform: translateX(-50%);
+			bottom: -110px;
+			width: 100%;
+			height: 36px;
+			background: rgba(0, 0, 0, 0.06);
+			border-radius: 50%;
+			z-index: -3;
+		}
+
+		/* ---------- Footer (orange block) ---------- */
+		footer {
+			margin-top: 48px;
+			background: var(--accent);
+			padding: 32px 24px;
+			color: #fff;
+			border-top-left-radius: 20px;
+			border-top-right-radius: 20px;
+		}
+
+		.footer-grid {
+			display: flex;
+			gap: 30px;
+			justify-content: space-between;
+			flex-wrap: wrap;
+			align-items: flex-start
+		}
+
+		.footer-col {
+			min-width: 160px
+		}
+
+		.footer-col h4 {
+			font-weight: 800;
+			margin-bottom: 12px
+		}
+
+		.footer-col ul {
+			list-style: none;
+			padding: 0
+		}
+
+		.footer-col li {
+			margin-bottom: 8px;
+			font-weight: 600
+		}
+
+		/* ---------- Responsive ---------- */
+		@media (max-width:1000px) {
+			.gallery-grid {
+				grid-template-columns: repeat(3, 1fr)
+			}
+
+			.user-actions-grid {
+				grid-template-columns: repeat(2, 1fr)
+			}
+		}
+
+		@media (max-width:680px) {
+			header {
+				padding: 0 16px
+			}
+
+			.hero-platform h1 {
+				font-size: 34px
+			}
+
+			.gallery-grid {
+				grid-template-columns: repeat(2, 1fr)
+			}
+
+			.user-actions-grid {
+				grid-template-columns: 1fr
+			}
+
+			nav ul {
+				display: none
+			}
+
+			.header-buttons {
+				display: flex;
+				gap: 8px;
+			}
+		}
+
+		/*----------scroll suave desplazamiento para el menu----------------*/
+		html {
+			scroll-behavior: smooth;
+		}
+
+		section {
+			scroll-margin-top: 100px;
+		}
+	</style>
+</head>
+
+<body>
+
+	<!-- NAV -->
+	<header>
+		<div class="brand">
+			<div class="logo"><i class="fa-solid fa-paw"></i></div>
+			<span>Patitas Felices</span>
+		</div>
+
+        <nav>
+            <ul>
+                <li><a href="#hero">INICIO</a></li>
+                <li><a href="#acciones">ACCIONES</a></li>
+                <li><a href="#citas">MIS CITAS</a></li>
+                <li><a href="#galeria">GALERÍA</a></li>
+				<li><a th:href="@{/mis-citas}">MIS CITAS</a></li>
+            </ul>
+        </nav>
+
+		<div class="header-buttons">
+			<!-- Usuario autenticado -->
+			<div th:if="${#authorization.expression('isAuthenticated()')}"
+				style="display: flex; align-items: center; gap: 10px;">
+				<a th:href="@{/miperfil}">
+					<button class="btn-login">
+						<i class="fas fa-user"></i> PERFIL
+					</button>
+				</a>
+
+				<!-- Formulario simple -->
+				<form th:action="@{/logout}" method="post" style="margin: 0;">
+					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+					<button class="btn-logout" type="submit">
+						<i class="fas fa-sign-out-alt"></i> SALIR
+					</button>
+				</form>
+			</div>
+		</div>
+	</header>
+
+	<!-- HERO PLATFORM -->
+	<main>
+		<section id="hero" class="hero-wrap" aria-label="hero">
+			<div class="hero-platform" role="region">
+				<h1>BIENVENIDO <span th:text="${usuario?.cliente?.nombre}">Usuario</span></h1>
+
+				<div class="welcome-message">
+					¡Nos alegra verte de nuevo! 🐾
+				</div>
+
+				<div class="user-role" th:text="${rol?.replace('ROLE_', '')}">
+					CLIENTE
+				</div>
+
+				<div class="paw-icon"><i class="fa-solid fa-heart"></i></div>
+
+				<img class="hero-animals" src="https://i.pinimg.com/1200x/4c/bc/91/4cbc9152e4eda499d657e0f9b63df6df.jpg"
+					alt="varios perros y gatos apoyados en borde">
+			</div>
+		</section>
+
+		<!-- USER ACTIONS PLATFORM -->
+		<section id="acciones" class="user-actions-section" aria-label="acciones-usuario">
+			<div class="user-actions-platform">
+				<h1>SERVICIOS</h1>
+				<h2>¿Qué necesitas hacer hoy?</h2>
+
+				<div class="user-actions-grid">
+					<div class="user-action-card">
+						<div class="user-action-icon">
+							<i class="fas fa-paw"></i>
+						</div>
+						<h3>Inscribir Mascotas</h3>
+						<p>Agrega, edita o visualiza la información de tus mascotas registradas</p>
+						<a th:href="@{/mascotas/nueva}">
+							<button class="btn-action">Ver Mascotas</button>
+						</a>
+					</div>
+
+					<div class="user-action-card">
+						<div class="user-action-icon">
+							<i class="fas fa-calendar-plus"></i>
+						</div>
+						<h3>Nueva Cita</h3>
+						<p>Solicita una nueva cita para cualquiera de tus mascotas</p>
+						<a th:href="@{/citas/nueva}">
+							<button class="btn-action">Agendar Cita</button>
+						</a>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- GALLERY PLATFORM -->
+		<section id="galeria" class="gallery-wrap" aria-label="galeria">
+			<div class="gallery-platform">
+				<h2>NUESTRO TRABAJO</h2>
+
+				<div class="gallery-grid" aria-hidden="false">
+					<div class="tile"><img
+							src="https://sutuvet.com/wp-content/uploads/2021/11/BLOG_SUTUVET_CUIDADOS_PRE-OPERATORIOS_POST-OPERATORIOS_CIRUGIA.jpg"
+							alt="Cirugía veterinaria"></div>
+					<div class="tile"><img
+							src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjcA7T5lnxVk3b9WfRQn9Oz6mG_n0Em4YxTA&s"
+							alt="Consulta veterinaria"></div>
+					<div class="tile"><img
+							src="https://www.vetivet.pe/wp-content/uploads/2025/02/Hospitalizacion-mascotas-24h-Lima-Peru.jpg"
+							alt="Hospitalización"></div>
+					<div class="tile"><img
+							src="https://www.animalshealth.es/fileuploads/news/cancer-chemovet-mesa-de-trabajo-216837299411.png"
+							alt="Oncología veterinaria"></div>
+					<div class="tile"><img
+							src="https://i0.wp.com/blog.cuidamimascota.com/wp-content/uploads/2020/01/f1988-vet.png?fit=621%2C416&ssl=1"
+							alt="Vacunación"></div>
+					<div class="tile"><img
+							src="https://www.unavets.com/coso/wp-content/uploads/sites/37/2023/10/gato-hospitalizacion-coso-zaragoza-e1696520581570.png"
+							alt="Cuidado de gatos"></div>
+					<div class="tile"><img
+							src="https://img.freepik.com/fotos-premium/gato-rojo-esta-siendo-examinado-veterinario-veterinario_116815-584.jpg"
+							alt="Examen veterinario"></div>
+					<div class="tile"><img
+							src="https://st2.depositphotos.com/1116619/46891/i/450/depositphotos_468917308-stock-photo-cat-having-ultrasound-scan-examination.jpg"
+							alt="Ultrasonido"></div>
+				</div>
+			</div>
+		</section>
+
+	</main>
+
+	<!-- FOOTER (orange) -->
+	<footer>
+		<div class="footer-grid">
+			<div class="footer-col">
+				<div style="display:flex;align-items:center;gap:10px;">
+					<div
+						style="width:56px;height:56px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;">
+						<i class="fa-solid fa-paw" style="color:var(--accent);font-size:22px"></i>
+					</div>
+				</div>
+			</div>
+
+			<div class="footer-col">
+				<h4>Navegación</h4>
+				<ul>
+					<li><a href="#hero">INICIO</a></li>
+					<li><a href="#acciones">ACCIONES</a></li>
+					<li><a href="#citas">MIS CITAS</a></li>
+					<li><a href="#galeria">GALERÍA</a></li>
+				</ul>
+			</div>
+
+			<div class="footer-col">
+				<h4>Contacto</h4>
+				<ul>
+					<li>
+						<a href="https://wa.me/51987224378" target="_blank" rel="noopener">
+							<i class="fab fa-whatsapp"></i> WhatsApp
+						</a>
+					</li>
+					<li>
+						<a href="https://www.google.com/maps/place/VETERINARIA+PUPPYVET/@-11.8900727,-77.0727252,21z/data=!4m6!3m5!1s0x9105d1d9dac244c1:0x99ce188372d7de7a!8m2!3d-11.8901703!4d-77.0727273!16s%2Fg%2F11jzb_bp5h?entry=ttu&g_ep=EgoyMDI1MDgxOS4wIKXMDSoASAFQAw%3D%3D"
+							target="_blank" rel="noopener">
+							<i class="fas fa-map-marker-alt"></i> Dirección
+						</a>
+					</li>
+				</ul>
+			</div>
+
+			<div class="footer-col">
+				<h4>Cuenta</h4>
+				<ul>
+					<li><a th:href="@{/miperfil}">MI PERFIL</a></li>
+					<li>
+						<form th:action="@{/logout}" method="post" style="display:inline;">
+							<a href="#" onclick="this.parentNode.submit(); return false;">CERRAR SESIÓN</a>
+						</form>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</footer>
+
+</body>
+
+</html>

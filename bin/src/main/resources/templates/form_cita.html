@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Patitas Felices 🐾 - Agendar Cita</title>
+
+    <!-- Fonts + icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        :root {
+            --bg-dark: #fef6ed;
+            --white: #ffffff;
+            --light-gray: #ededf1;
+            --accent: #ff9800;
+            --muted: #bdbdbd;
+            --text-dark: #333333;
+        }
+
+        *{box-sizing:border-box;margin:0;padding:0}
+        html,body{height:100%}
+        body{
+            font-family: "Poppins", sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-dark);
+            -webkit-font-smoothing:antialiased;
+            -moz-osx-font-smoothing:grayscale;
+            line-height:1.4;
+        }
+
+        a{color:inherit;text-decoration:none}
+        img{max-width:100%;display:block}
+
+        /* HEADER */
+        header {
+            position: fixed;
+            left:0;right:0;top:0;
+            height:72px;
+            z-index:999;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            padding:0 34px;
+            background: var(--white);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+        }
+
+        .brand{
+            display:flex;align-items:center;gap:12px;
+        }
+        .brand .logo {
+            width:44px;height:44px;border-radius:10px;
+            background: linear-gradient(135deg, var(--accent), #f58500);
+            display:flex;align-items:center;justify-content:center;
+            box-shadow:0 2px 6px rgba(0,0,0,0.12);
+        }
+        .brand .logo i{color:#fff;font-size:18px}
+        .brand span{font-weight:700;color:#222;font-size:18px;letter-spacing:0.6px}
+
+        nav ul{
+            display:flex;gap:26px;list-style:none;align-items:center;
+        }
+        nav ul li a{font-weight:600;color:#222;font-size:14px}
+        nav ul li a:hover{color:var(--accent)}
+
+        .btn-login, .btn-logout{
+            padding:8px 16px;border-radius:22px;font-weight:700;border:none;cursor:pointer;margin-left:10px;
+        }
+        .btn-login{background:var(--accent);color:#fff;}
+        .btn-logout{background:#dc3545;color:#fff;}
+
+        main {margin-top: 110px;}
+
+        /* FORM CONTAINER */
+        .form-section {
+            max-width: 1000px;
+            margin: 0 auto 100px;
+            background: var(--light-gray);
+            border-radius: 28px;
+            padding: 50px 40px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 40px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+        }
+
+        .form-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .form-image img {
+            width: 100%;
+            max-width: 420px;
+            border-radius: 18px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .form-content {
+            flex: 1;
+        }
+
+        .form-content h1 {
+            text-align: center;
+            color: var(--accent);
+            font-size: 36px;
+            margin-bottom: 26px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        label {
+            font-weight: 600;
+            display: block;
+            margin-top: 12px;
+            color: var(--text-dark);
+        }
+
+        select, input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 15px;
+            background: #fff;
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+        }
+
+        select:focus, input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 6px rgba(255,152,0,0.5);
+            outline: none;
+        }
+
+        .btn-save {
+            margin-top: 26px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 26px;
+            border-radius: 25px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-save:hover {
+            background: #e68900;
+        }
+
+        /* FOOTER */
+        footer{
+            margin-top:48px;
+            background:var(--accent);
+            padding:32px 24px;
+            color:#fff;
+            border-top-left-radius:20px;
+            border-top-right-radius:20px;
+        }
+
+        .footer-grid{
+            display:flex;
+            gap:30px;
+            justify-content:space-between;
+            flex-wrap:wrap;
+            align-items:flex-start;
+        }
+
+        .footer-col{min-width:160px}
+        .footer-col h4{font-weight:800;margin-bottom:12px}
+        .footer-col ul{list-style:none;padding:0}
+        .footer-col li{margin-bottom:8px;font-weight:600}
+
+        @media(max-width:900px){
+            .form-section{flex-direction:column-reverse;align-items:center;}
+            .form-image{display:none;}
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <div class="brand">
+            <div class="logo"><i class="fa-solid fa-paw"></i></div>
+            <span>Patitas Felices</span>
+        </div>
+
+        <nav>
+            <ul>
+                <li><a th:href="@{/menu}">INICIO</a></li>
+                <li><a th:href="@{/mascotas/nueva}">INSCRIBIR</a></li>
+                <li><a th:href="@{/citas/nueva}">CITAS</a></li>
+				<li><a th:href="@{/mis-citas}">MIS CITAS</a></li>
+            </ul>
+        </nav>
+
+        <div class="header-buttons">
+            <div th:if="${#authorization.expression('isAuthenticated()')}" style="display:flex;align-items:center;gap:10px;">
+                <a th:href="@{/miperfil}">
+                    <button class="btn-login">
+                        <i class="fas fa-user"></i> PERFIL
+                    </button>
+                </a>
+                <form th:action="@{/logout}" method="post" style="margin:0;">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <button class="btn-logout" type="submit">
+                        <i class="fas fa-sign-out-alt"></i> SALIR
+                    </button>
+                </form>
+            </div>
+        </div>
+    </header>
+
+    <!-- FORMULARIO -->
+    <main>
+        <section class="form-section">
+            
+            <!-- Imagen al lado izquierdo -->
+            <div class="form-image">
+                <img src="https://i.pinimg.com/736x/c4/6b/ba/c46bba816945dd8755e079f5f7e80ae8.jpg" alt="Agendar cita veterinaria">
+            </div>
+
+            <!-- Formulario -->
+            <div class="form-content">
+                <h1>Agendar Cita 📅</h1>
+
+                <form th:action="@{/citas/guardar}" th:object="${cita}" method="post">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+                    <label>Mascota</label>
+                    <div th:if="${#lists.isEmpty(mascotas)}">
+                        <p style="color:#e53935;text-align:center;font-weight:600;">
+                            ⚠️ No tienes mascotas registradas.<br>
+                            Registra una primero <a th:href="@{/mascotas/nueva}" style="color:var(--accent);font-weight:700;">aquí</a>.
+                        </p>
+                    </div>
+                    <div th:unless="${#lists.isEmpty(mascotas)}">
+                        <select name="mascota.id" required>
+                            <option value="">Seleccione una mascota</option>
+                            <option th:each="m : ${mascotas}" th:value="${m.id}" th:text="${m.nombre}"></option>
+                        </select>
+                    </div>
+
+                    <label for="servicio">Servicio</label>
+                    <select id="servicio" th:field="*{servicio.id}" required>
+                        <option value="" disabled selected>— Selecciona —</option>
+                        <option th:each="s : ${servicios}" th:value="${s.id}" th:text="${s.nombre}"></option>
+                    </select>
+
+                    <label for="veterinario">Veterinario</label>
+                    <select id="veterinario" th:field="*{veterinario.id}">
+                        <option value="">(Escoja un veterinario)</option>
+                        <option th:each="v : ${veterinarios}" th:value="${v.id}" th:text="${v.nombre}"></option>
+                    </select>
+
+                    <label for="fechaCita">Fecha y Hora</label>
+                    <select id="fechaCita" th:field="*{fechaCita}" required>
+                        <option value="" disabled selected>— Selecciona —</option>
+                        <option th:each="slot : ${horariosDisponibles}"
+                                th:value="${slot}"
+                                th:text="${#temporals.format(slot, 'dd/MM/yyyy HH:mm')}">
+                        </option>
+                    </select>
+
+                    <button class="btn-save" type="submit">
+                        <i class="fa-solid fa-calendar-check"></i> Confirmar Cita
+                    </button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <div style="width:56px;height:56px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;">
+                        <i class="fa-solid fa-paw" style="color:var(--accent);font-size:22px"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Navegación</h4>
+                <ul>
+                    <li><a th:href="@{/menu}">INICIO</a></li>
+                    <li><a th:href="@{/mascotas/nueva}">INSCRIBIR</a></li>
+                    <li><a th:href="@{/citas/nueva}">CITAS</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Contacto</h4>
+                <ul>
+                    <li><a href="https://wa.me/51987224378" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a></li>
+                    <li><a href="https://maps.app.goo.gl/..." target="_blank"><i class="fas fa-map-marker-alt"></i> Dirección</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Cuenta</h4>
+                <ul>
+                    <li><a th:href="@{/miperfil}">MI PERFIL</a></li>
+                    <li>
+                        <form th:action="@{/logout}" method="post" style="display:inline;">
+                            <a href="#" onclick="this.parentNode.submit(); return false;">CERRAR SESIÓN</a>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SweetAlert -->
+	<script th:if="${mensajeExito != null}">
+	Swal.fire({
+	    icon: 'success',
+	    title: '¡Cita registrada!',
+	    text: '[[${mensajeExito}]]',
+	    confirmButtonColor: '#ff9800',
+	    confirmButtonText: 'Aceptar'
+	});
+	</script>
+
+	
+</body>
+</html>

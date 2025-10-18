@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Registro - SuperPet</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('https://images.unsplash.com/photo-1558788353-f76d92427f16') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .form-container {
+      background: rgba(255, 255, 255, 0.85);
+      padding: 35px 30px;
+      border-radius: 20px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+      width: 400px;
+      backdrop-filter: blur(6px);
+      animation: fadeIn 1s ease;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: bold;
+      margin-top: 12px;
+      display: block;
+      color: #333;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      outline: none;
+      transition: all 0.3s ease;
+      font-size: 15px;
+    }
+
+    input:focus {
+      border-color: #28a745;
+      box-shadow: 0 0 6px rgba(40,167,69,0.6);
+    }
+
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #28a745, #218838);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+    }
+
+    .login-link {
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .login-link a {
+      color: #007bff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+
+    .success-message {
+      color: green;
+      margin-top: 12px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .error-message {
+      color: red;
+      margin-top: 12px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h1>✨ Regístrate ahora</h1>
+
+    <form th:action="@{/registro}" method="post">
+      <label for="nombre">Nombre completo</label>
+      <input type="text" id="nombre" name="nombre" required>
+
+      <label for="telefono">Teléfono</label>
+      <input type="text" id="telefono" name="telefono" required>
+
+      <label for="email">Correo electrónico</label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="direccion">Dirección</label>
+      <input type="text" id="direccion" name="direccion" required>
+
+      <label for="password">Contraseña</label>
+      <input type="password" id="password" name="password" required>
+
+      <button type="submit">🚀 Registrarse</button>
+    </form>
+
+    <!-- Mensajes -->
+    <div th:if="${RegistroExitoso}" class="success-message">
+      ¡Registro exitoso! Ahora puedes <a th:href="@{/login}">iniciar sesión</a>.
+    </div>
+    <div th:if="${error}" class="error-message" th:text="${error}"></div>
+
+    <div class="login-link">
+      <p>¿Ya tienes cuenta? <a th:href="@{/login}">Inicia sesión</a></p>
+    </div>
+  </div>
+</body>
+</html>
