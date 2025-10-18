@@ -3,176 +3,327 @@
 <head>
     <title>Perfil de Usuario</title>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        /* Reset */
+        :root {
+            --bg-light-start: #FF9800;
+            --accent: #FF5722;
+            --text-dark: #333333;
+            --form-bg: rgba(255, 152, 0, 0.9);
+            --white: #ffffff; 
+            --dark-button: #444444; 
+            --text-light: var(--white);
+            --bg-yellow-corner: #FFC107;
+            --fallback-grey: #f0f0f0;
+            --main-title-dark: #3a3a3a;
+            --header-bg: #ffffff;
+            --profile-card-bg: #FF9800;
+            --input-bg: #ffffff;
+            --input-text: #333333;
+            --button-bg-orange: #FF9800;
+            --button-hover-orange: #FF8F00;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
 
         body {
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
+            background: linear-gradient(to right, var(--bg-light-start), var(--accent));
+            color: var(--text-dark);
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        header {
+            width: 100%;
+            height: 60px;
+            background-color: var(--header-bg);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-logo i {
+            color: var(--bg-light-start);
+            font-size: 24px;
+        }
+
+        .header-brand-text {
+            font-weight: 700;
+            color: var(--text-dark);
+            font-size: 18px;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 30px;
+        }
+
+        .header-nav a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .header-nav a:hover {
+            color: var(--bg-light-start);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-icon {
+            color: var(--text-dark);
+            font-size: 20px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease;
+        }
+        .header-icon:hover {
+            background-color: #f0f0f0;
+        }
+
+        .header-logout {
+            background-color: var(--bg-light-start);
+            color: var(--white);
+            border-radius: 8px;
+            width: auto;
+            padding: 8px 15px;
+            font-size: 16px;
+        }
+        .header-logout i {
+            color: var(--white);
+        }
+        .header-logout:hover {
+            background-color: var(--button-hover-orange);
+        }
+
+        main {
+            flex-grow: 1;
+            display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(to right, rgba(44, 62, 80, 0.9), rgba(52, 152, 219, 0.9)),
-                        url('https://images.unsplash.com/photo-1558788353-f76d92427f16') center/cover no-repeat;
-            color: #fff;
-            padding: 20px;
-        }
-
-        /* Tarjeta */
-        .profile-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(12px);
-            border-radius: 20px;
-            padding: 40px 50px;
+            padding: 80px 20px 20px;
             width: 100%;
-            max-width: 600px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
-            text-align: center;
-            animation: fadeIn 1s ease-in-out;
         }
 
-        /* Animación entrada */
+        .profile-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            border-radius: 20px;
+            padding: 30px 40px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+            animation: fadeIn 0.8s ease-out;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
         @keyframes fadeIn {
-            from {opacity: 0; transform: translateY(20px);}
+            from {opacity: 0; transform: translateY(30px);}
             to {opacity: 1; transform: translateY(0);}
         }
 
-        /* Avatar Jsxdxd*/
+        .profile-card h2 {
+            font-size: 24px;
+            color: var(--text-dark);
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+
         .profile-avatar {
-            width: 120px;
-            height: 120px;
+            width: 90px;
+            height: 90px;
             border-radius: 50%;
-            object-fit: cover;
-            margin: 0 auto 20px;
-            border: 4px solid rgba(255,255,255,0.3);
-            background: rgba(255,255,255,0.2);
+            background: var(--dark-button);
+            margin: 0 auto 25px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 3rem;
-            color: white;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-            transition: transform 0.3s ease;
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
-        .profile-avatar:hover {
-            transform: scale(1.08);
+        .profile-avatar i {
+            font-size: 45px;
         }
-
-        /* Rol */
-        .role-badge {
-            display: inline-block;
-            padding: 6px 18px;
-            background: rgba(52, 152, 219, 0.9);
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: bold;
-            margin-bottom: 25px;
-            color: #fff;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* Información */
+        
         .profile-info {
             text-align: left;
-            margin-top: 15px;
+            margin-top: 20px;
         }
 
-        .info-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
+        .info-group {
             margin-bottom: 18px;
-            padding-bottom: 12px;
-            border-bottom: 1px dashed rgba(255, 255, 255, 0.3);
-        }
-
-        .info-item:last-child {
-            border-bottom: none;
         }
 
         .info-label {
-            font-weight: bold;
-            min-width: 130px;
-            color: #f0f0f0;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            display: block;
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+            text-transform: uppercase;
         }
 
-        .info-value {
-            flex: 1;
-            color: #fff;
+        .info-value-input {
+            width: 100%;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            background-color: var(--input-bg);
+            color: var(--input-text);
+            font-size: 15px;
+            font-weight: 500;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            cursor: default;
         }
 
-        /* Iconos */
-        .info-label::before {
-            content: '📌';
-            font-size: 1rem;
-        }
-        .info-label.email::before { content: '📧'; }
-        .info-label.name::before { content: '👤'; }
-        .info-label.phone::before { content: '📞'; }
-        .info-label.address::before { content: '🏠'; }
-
-        /* Botón volver */
         .btn-volver {
             display: inline-block;
             margin-top: 30px;
-            padding: 14px 30px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, #3498db, #2980b9);
-            color: #fff;
-            font-size: 1.1rem;
-            font-weight: bold;
+            padding: 12px 25px;
+            border-radius: 8px;
+            background-color: var(--button-bg-orange);
+            color: var(--white);
+            font-size: 15px;
+            font-weight: 600;
             text-decoration: none;
             transition: all 0.3s ease;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: none;
         }
 
         .btn-volver:hover {
-            background: linear-gradient(135deg, #2980b9, #1f618d);
-            transform: translateY(-3px);
+            background-color: var(--button-hover-orange);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 0 15px;
+            }
+            .header-nav {
+                gap: 15px;
+            }
+            .header-brand-text {
+                font-size: 16px;
+            }
+            .header-nav a {
+                font-size: 13px;
+            }
+            .profile-card {
+                padding: 25px 30px;
+                max-width: 90%;
+            }
+            .profile-card h2 {
+                font-size: 20px;
+            }
+            .profile-avatar {
+                width: 70px;
+                height: 70px;
+                margin-bottom: 20px;
+            }
+            .profile-avatar i {
+                font-size: 35px;
+            }
+            .info-group {
+                margin-bottom: 15px;
+            }
+            .info-label {
+                font-size: 12px;
+            }
+            .info-value-input {
+                font-size: 14px;
+                padding: 8px 12px;
+            }
+            .btn-volver {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="profile-card">
-        <!-- Avatar (si no hay imagen, solo cargar un inicial y no hay imagen p) -->
-        <div class="profile-avatar">
-            <span th:text="${usuario.cliente.nombre.substring(0,1)}">U</span>
+    <header>
+        <div class="header-left">
+            <a href="#" class="header-logo"><i class="fas fa-paw"></i></a>
+            <span class="header-brand-text">PATITAS FELICES</span>
         </div>
-
-        <!-- Rol -->
-        <div class="role-badge" th:text="${rol}">ROL</div>
-
-        <!-- Info usuario -->
-        <div class="profile-info">
-            <div class="info-item">
-                <span class="info-label email">Correo:</span>
-                <span class="info-value" th:text="${usuario.email}">correo@ejemplo.com</span>
-            </div>
-            <div class="info-item">
-                <span class="info-label name">Nombre:</span>
-                <span class="info-value" th:text="${usuario.cliente.nombre}">Nombre</span>
-            </div>
-            <div class="info-item">
-                <span class="info-label phone">Teléfono:</span>
-                <span class="info-value" th:text="${usuario.cliente.telefono}">Teléfono</span>
-            </div>
-            <div class="info-item">
-                <span class="info-label address">Dirección:</span>
-                <span class="info-value" th:text="${usuario.cliente.direccion}">Dirección</span>
-            </div>
+        <nav class="header-nav">
+            <a th:href="@{/menu}">SERVICIOS</a>
+            <a th:href="@{/mis-citas}">MIS CITAS</a>
+        </nav>
+        <div class="header-right">
+            <a th:href="@{/miperfil}" class="header-icon"><i class="fas fa-user"></i></a>
+            <form th:action="@{/logout}" method="post" style="margin:0;">
+                <button type="submit" class="header-icon header-logout"><i class="fas fa-sign-out-alt"></i></button>
+            </form>
         </div>
+    </header>
 
-        <!-- Botón volver -->
-        <a th:href="@{/menu}" class="btn-volver">⬅ Volver al Menú</a>
-    </div>
+    <main>
+        <div class="profile-card">
+            <h2>PERFIL</h2>
+            
+            <div class="profile-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+
+            <div class="profile-info">
+                <div class="info-group">
+                    <label class="info-label">Correo Electrónico:</label>
+                    <input type="text" class="info-value-input" th:value="${usuario.email}" readonly />
+                </div>
+                <div class="info-group">
+                    <label class="info-label">Nombre:</label>
+                    <input type="text" class="info-value-input" th:value="${usuario.cliente.nombre}" readonly />
+                </div>
+                <div class="info-group">
+                    <label class="info-label">Teléfono:</label>
+                    <input type="text" class="info-value-input" th:value="${usuario.cliente.telefono}" readonly />
+                </div>
+                <div class="info-group">
+                    <label class="info-label">Dirección:</label>
+                    <input type="text" class="info-value-input" th:value="${usuario.cliente.direccion}" readonly />
+                </div>
+            </div>
+
+            <a th:href="@{/menu}" class="btn-volver"><i class="fas fa-arrow-left"></i> Volver</a>
+        </div>
+    </main>
 </body>
 </html>
