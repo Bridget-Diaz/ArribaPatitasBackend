@@ -8,22 +8,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
-            --bg-light-start: #FF9800;
-            --accent: #FF5722;
+            --bg-dark: #fef6ed;
+            --white: #ffffff;
+            --light-gray: #ededf1;
+            --accent: #ff9800;
+            --muted: #bdbdbd;
             --text-dark: #333333;
-            --form-bg: rgba(255, 152, 0, 0.9);
-            --white: #ffffff; 
-            --dark-button: #444444; 
-            --text-light: var(--white);
-            --bg-yellow-corner: #FFC107;
-            --fallback-grey: #f0f0f0;
-            --main-title-dark: #3a3a3a;
-            --header-bg: #ffffff;
-            --profile-card-bg: #FF9800;
-            --input-bg: #ffffff;
-            --input-text: #333333;
-            --button-bg-orange: #FF9800;
-            --button-hover-orange: #FF8F00;
         }
 
         * {
@@ -37,96 +27,94 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            background: linear-gradient(to right, var(--bg-light-start), var(--accent));
+            background: var(--bg-dark);
             color: var(--text-dark);
             padding: 0;
-            overflow-x: hidden;
         }
 
+        /* ---------- NAV (copiado del diseño de menú) ---------- */
         header {
-            width: 100%;
-            height: 60px;
-            background-color: var(--header-bg);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
             position: fixed;
-            top: 0;
             left: 0;
-            z-index: 100;
-        }
-
-        .header-left {
+            right: 0;
+            top: 0;
+            height: 72px;
+            z-index: 999;
             display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: space-between;
+            padding: 0 34px;
+            background: var(--white);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
         }
 
-        .header-logo i {
-            color: var(--bg-light-start);
-            font-size: 24px;
-        }
-
-        .header-brand-text {
-            font-weight: 700;
-            color: var(--text-dark);
-            font-size: 18px;
-        }
-
-        .header-nav {
-            display: flex;
-            gap: 30px;
-        }
-
-        .header-nav a {
-            color: var(--text-dark);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 15px;
-            transition: color 0.3s ease;
-        }
-
-        .header-nav a:hover {
-            color: var(--bg-light-start);
-        }
-
-        .header-right {
+        .brand {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
         }
 
-        .header-icon {
-            color: var(--text-dark);
-            font-size: 20px;
-            cursor: pointer;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+        .brand .logo {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--accent), #f58500);
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background-color 0.3s ease;
-        }
-        .header-icon:hover {
-            background-color: #f0f0f0;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
         }
 
-        .header-logout {
-            background-color: var(--bg-light-start);
-            color: var(--white);
-            border-radius: 8px;
-            width: auto;
-            padding: 8px 15px;
-            font-size: 16px;
+        .brand .logo i {
+            color: #fff;
+            font-size: 18px;
         }
-        .header-logout i {
-            color: var(--white);
+
+        .brand span {
+            font-weight: 700;
+            color: #222;
+            font-size: 18px;
+            letter-spacing: 0.6px;
         }
-        .header-logout:hover {
-            background-color: var(--button-hover-orange);
+
+        nav ul {
+            display: flex;
+            gap: 26px;
+            list-style: none;
+            align-items: center;
+        }
+
+        nav ul li a {
+            font-weight: 600;
+            color: #222;
+            font-size: 14px;
+			text-decoration: none;
+        }
+
+        nav ul li a:hover {
+            color: var(--accent);
+        }
+
+        .btn-login {
+            background: var(--accent);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 22px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .btn-logout {
+            background: #dc3545;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 22px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            margin-left: 10px;
         }
 
         main {
@@ -134,26 +122,18 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 80px 20px 20px;
+            padding: 120px 20px 20px; /* espacio para el header */
             width: 100%;
         }
 
         .profile-card {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
             padding: 30px 40px;
             width: 100%;
             max-width: 450px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             text-align: center;
-            animation: fadeIn 0.8s ease-out;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        @keyframes fadeIn {
-            from {opacity: 0; transform: translateY(30px);}
-            to {opacity: 1; transform: translateY(0);}
         }
 
         .profile-card h2 {
@@ -167,14 +147,13 @@
             width: 90px;
             height: 90px;
             border-radius: 50%;
-            background: var(--dark-button);
+            background: var(--accent);
             margin: 0 auto 25px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 3rem;
             color: var(--white);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
         .profile-avatar i {
             font-size: 45px;
@@ -203,11 +182,10 @@
             padding: 10px 15px;
             border: none;
             border-radius: 8px;
-            background-color: var(--input-bg);
-            color: var(--input-text);
+            background-color: #f6f6f6;
+            color: var(--text-dark);
             font-size: 15px;
             font-weight: 500;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             cursor: default;
         }
 
@@ -216,72 +194,27 @@
             margin-top: 30px;
             padding: 12px 25px;
             border-radius: 8px;
-            background-color: var(--button-bg-orange);
+            background-color: var(--accent);
             color: var(--white);
             font-size: 15px;
             font-weight: 600;
             text-decoration: none;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             border: none;
         }
 
         .btn-volver:hover {
-            background-color: var(--button-hover-orange);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            background-color: #e68900;
         }
 
-        @media (max-width: 768px) {
-            header {
-                padding: 0 15px;
-            }
-            .header-nav {
-                gap: 15px;
-            }
-            .header-brand-text {
-                font-size: 16px;
-            }
-            .header-nav a {
-                font-size: 13px;
-            }
-            .profile-card {
-                padding: 25px 30px;
-                max-width: 90%;
-            }
-            .profile-card h2 {
-                font-size: 20px;
-            }
-            .profile-avatar {
-                width: 70px;
-                height: 70px;
-                margin-bottom: 20px;
-            }
-            .profile-avatar i {
-                font-size: 35px;
-            }
-            .info-group {
-                margin-bottom: 15px;
-            }
-            .info-label {
-                font-size: 12px;
-            }
-            .info-value-input {
-                font-size: 14px;
-                padding: 8px 12px;
-            }
-            .btn-volver {
-                padding: 10px 20px;
-                font-size: 14px;
-            }
-        }
     </style>
 </head>
 <body>
+    <!-- NAV -->
     <header>
-        <div class="header-left">
-            <a href="#" class="header-logo"><i class="fas fa-paw"></i></a>
-            <span class="header-brand-text">PATITAS FELICES</span>
+        <div class="brand">
+            <div class="logo"><i class="fa-solid fa-paw"></i></div>
+            <span>Patitas Felices</span>
         </div>
         <nav class="header-nav">
             <a th:href="@{/menu}">SERVICIOS</a>
@@ -292,6 +225,30 @@
             <form th:action="@{/logout}" method="post" style="margin:0;">
                 <button type="submit" class="header-icon header-logout"><i class="fas fa-sign-out-alt"></i></button>
             </form>
+        </div>
+    </header>
+
+        <nav>
+            <ul>
+                <li><a th:href="@{/menu}">SERVICIOS</a></li>
+                <li><a th:href="@{/mis-citas}">MIS CITAS</a></li>
+            </ul>
+        </nav>
+
+        <div class="header-buttons">
+            <div th:if="${#authorization.expression('isAuthenticated()')}" style="display: flex; align-items: center; gap: 10px;">
+                <a th:href="@{/miperfil}">
+                    <button class="btn-login">
+                        <i class="fas fa-user"></i> PERFIL
+                    </button>
+                </a>
+                <form th:action="@{/logout}" method="post" style="margin: 0;">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <button class="btn-logout" type="submit">
+                        <i class="fas fa-sign-out-alt"></i> SALIR
+                    </button>
+                </form>
+            </div>
         </div>
     </header>
 
