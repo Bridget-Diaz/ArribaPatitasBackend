@@ -216,6 +216,17 @@
             <div class="logo"><i class="fa-solid fa-paw"></i></div>
             <span>Patitas Felices</span>
         </div>
+        <nav class="header-nav">
+            <a th:href="@{/menu}">SERVICIOS</a>
+            <a th:href="@{/mis-citas}">MIS CITAS</a>
+        </nav>
+        <div class="header-right">
+            <a th:href="@{/miperfil}" class="header-icon"><i class="fas fa-user"></i></a>
+            <form th:action="@{/logout}" method="post" style="margin:0;">
+                <button type="submit" class="header-icon header-logout"><i class="fas fa-sign-out-alt"></i></button>
+            </form>
+        </div>
+    </header>
 
         <nav>
             <ul>
