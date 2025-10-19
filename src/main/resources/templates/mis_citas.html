@@ -68,6 +68,23 @@
         .appointment-date{font-weight:700;color:var(--accent);}
         .appointment-service{font-weight:600;margin-top:5px;}
         .appointment-mascota{color:#666;}
+        .appointment-actions{
+            margin-top:15px;
+            text-align:right;
+        }
+        .btn-descargar{
+            background-color:var(--accent);
+            color:#fff;
+            border:none;
+            padding:8px 14px;
+            border-radius:8px;
+            font-weight:600;
+            cursor:pointer;
+            transition:background-color 0.3s;
+        }
+        .btn-descargar:hover{
+            background-color:#e68900;
+        }
         .no-appointments{text-align:center;color:var(--muted);padding:40px;}
         footer{
             margin-top:60px;background:var(--accent);
@@ -88,12 +105,11 @@
         <div class="logo"><i class="fa-solid fa-paw"></i></div>
         <span>Patitas Felices</span>
     </div>
-    <nav>
-		<ul>
-		    <li><a href="@{/menu}">SERVICIOS</a></li>
-			<li><a th:href="@{/mis-citas}">MIS CITAS</a></li>
-		</ul>
-    </nav>
+	<nav>
+	    <strong><a th:href="@{/menu}">SERVICIOS</a></strong>
+		<strong><a th:href="@{/mis-citas}">MIS CITAS</a></strong>
+	</nav>
+	
     <div class="header-buttons">
         <div th:if="${#authorization.expression('isAuthenticated()')}" style="display:flex;align-items:center;gap:10px;">
             <a th:href="@{/miperfil}">
@@ -125,6 +141,15 @@
                     <i class="fas fa-paw"></i>
                     <span th:text="${cita.mascota?.nombre}">Mascota</span>
                 </div>
+
+                <!-- 🔽 Botón para descargar detalles -->
+				<div class="appointment-actions">
+				    <a th:href="@{'/citas/descargar/' + ${cita.id}}" target="_blank">
+				        <button class="btn-descargar">
+				            <i class="fas fa-download"></i> Descargar Detalles
+				        </button>
+				    </a>
+				</div>
             </div>
         </div>
 
@@ -142,12 +167,12 @@
     <div class="footer-grid">
         <div class="footer-col">
             <h4>Navegación</h4>
-			<ul>
-			    <li><a href="@{/menu}">SERVICIOS</a></li>
-				<li><a th:href="@{/mis-citas}">MIS CITAS</a></li>
-			</ul>
+            <ul>
+                <li><a href="@{/menu}">SERVICIOS</a></li>
+                <li><a th:href="@{/mis-citas}">MIS CITAS</a></li>
+            </ul>
         </div>
-		
+        
         <div class="footer-col">
             <h4>Contacto</h4>
             <ul>
