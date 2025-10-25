@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Perfil de Usuario</title>
+    <title>Arriba Patitas 🐾 - Perfil de Usuario</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -12,6 +12,7 @@
             --white: #ffffff;
             --light-gray: #ededf1;
             --accent: #ff9800;
+            --accent-hover: #ff7a00;
             --muted: #bdbdbd;
             --text-dark: #333333;
         }
@@ -32,20 +33,19 @@
             padding: 0;
         }
 
-        /* ---------- NAV (copiado del diseño de menú) ---------- */
+        /* ---------- NAVBAR ESTILO LOGIN ---------- */
         header {
             position: fixed;
-            left: 0;
-            right: 0;
             top: 0;
-            height: 72px;
-            z-index: 999;
+            width: 100%;
+            height: 75px;
+            background-color: var(--white);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 34px;
-            background: var(--white);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+            padding: 0 40px;
+            z-index: 1000;
         }
 
         .brand {
@@ -55,14 +55,14 @@
         }
 
         .brand .logo {
-            width: 44px;
-            height: 44px;
+            width: 45px;
+            height: 45px;
             border-radius: 10px;
-            background: linear-gradient(135deg, var(--accent), #f58500);
+            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
         }
 
         .brand .logo i {
@@ -71,58 +71,73 @@
         }
 
         .brand span {
-            font-weight: 700;
+            font-weight: 800;
+            font-size: 20px;
             color: #222;
-            font-size: 18px;
-            letter-spacing: 0.6px;
+            letter-spacing: 0.8px;
         }
 
-        nav ul {
+        nav {
             display: flex;
-            gap: 26px;
-            list-style: none;
             align-items: center;
+            gap: 26px;
         }
 
-        nav ul li a {
+        nav a {
+            text-decoration: none;
             font-weight: 600;
             color: #222;
             font-size: 14px;
-			text-decoration: none;
+            transition: color 0.3s ease;
         }
 
-        nav ul li a:hover {
+        nav a:hover {
             color: var(--accent);
+        }
+
+        .header-buttons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .btn-login {
             background: var(--accent);
             color: #fff;
             padding: 8px 16px;
-            border-radius: 22px;
+            border-radius: 20px;
             font-weight: 700;
             border: none;
             cursor: pointer;
-            margin-left: 10px;
+            transition: background 0.3s ease;
+        }
+
+        .btn-login:hover {
+            background: var(--accent-hover);
         }
 
         .btn-logout {
             background: #dc3545;
             color: #fff;
             padding: 8px 16px;
-            border-radius: 22px;
+            border-radius: 20px;
             font-weight: 700;
             border: none;
             cursor: pointer;
-            margin-left: 10px;
+            transition: background 0.3s ease;
         }
 
+        .btn-logout:hover {
+            background: #b91d2a;
+        }
+
+        /* ---------- CONTENIDO ---------- */
         main {
             flex-grow: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 120px 20px 20px; /* espacio para el header */
+            padding: 120px 20px 40px;
             width: 100%;
         }
 
@@ -155,10 +170,11 @@
             font-size: 3rem;
             color: var(--white);
         }
+
         .profile-avatar i {
             font-size: 45px;
         }
-        
+
         .profile-info {
             text-align: left;
             margin-top: 20px;
@@ -204,35 +220,37 @@
         }
 
         .btn-volver:hover {
-            background-color: #e68900;
+            background-color: var(--accent-hover);
         }
 
+        @media (max-width: 700px) {
+            header {
+                flex-direction: column;
+                height: auto;
+                padding: 15px;
+                text-align: center;
+                gap: 10px;
+            }
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 16px;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- NAV -->
+
+    <!-- NAVBAR -->
     <header>
         <div class="brand">
             <div class="logo"><i class="fa-solid fa-paw"></i></div>
-            <span>Patitas Felices</span>
+            <span>ARRIBA PATITAS</span>
         </div>
-        <nav class="header-nav">
-            <a th:href="@{/menu}">SERVICIOS</a>
-            <a th:href="@{/mis-citas}">MIS CITAS</a>
-        </nav>
-        <div class="header-right">
-            <a th:href="@{/miperfil}" class="header-icon"><i class="fas fa-user"></i></a>
-            <form th:action="@{/logout}" method="post" style="margin:0;">
-                <button type="submit" class="header-icon header-logout"><i class="fas fa-sign-out-alt"></i></button>
-            </form>
-        </div>
-    </header>
 
         <nav>
-            <ul>
-                <li><a th:href="@{/menu}">SERVICIOS</a></li>
-                <li><a th:href="@{/mis-citas}">MIS CITAS</a></li>
-            </ul>
+            <a th:href="@{/menu}">SERVICIOS</a>
+            <a th:href="@{/mis-citas}">MIS CITAS</a>
         </nav>
 
         <div class="header-buttons">
@@ -252,10 +270,11 @@
         </div>
     </header>
 
+    <!-- CONTENIDO PRINCIPAL -->
     <main>
         <div class="profile-card">
             <h2>PERFIL</h2>
-            
+
             <div class="profile-avatar">
                 <i class="fas fa-user"></i>
             </div>
@@ -282,5 +301,6 @@
             <a th:href="@{/menu}" class="btn-volver"><i class="fas fa-arrow-left"></i> Volver</a>
         </div>
     </main>
+
 </body>
 </html>
