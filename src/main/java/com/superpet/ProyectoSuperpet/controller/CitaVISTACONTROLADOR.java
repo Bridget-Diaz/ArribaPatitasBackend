@@ -181,7 +181,7 @@ public class CitaVISTACONTROLADOR {
 	            document.add(Chunk.NEWLINE);
 
 	            // 🧡 Pie de página naranja
-	            Paragraph footer = new Paragraph("Gracias por confiar en Patitas Felices 🐕‍🦺", footerFont);
+	            Paragraph footer = new Paragraph("Gracias por confiar en Arriba Patitas 🐕‍🦺", footerFont);
 	            footer.setAlignment(Element.ALIGN_CENTER);
 	            footer.setSpacingBefore(30);
 	            document.add(footer);
