@@ -3,6 +3,9 @@ package com.superpet.ProyectoSuperpet.model;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import org.hibernate.annotations.CreationTimestamp;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -25,8 +28,10 @@ public class Cliente {
     @Column(length = 200)
     private String direccion;
 
-    @Column(name = "fecha_registro")
+    @CreationTimestamp // esto se agrego xdddd
+    @Column(name = "fecha_registro", updatable = false)
     private LocalDateTime fechaRegistro;
+
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = false)
     @JsonIgnore  

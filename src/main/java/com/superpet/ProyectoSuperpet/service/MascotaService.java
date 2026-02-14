@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.superpet.ProyectoSuperpet.model.Cliente;
 import com.superpet.ProyectoSuperpet.model.Mascota;
 import com.superpet.ProyectoSuperpet.repository.MascotaRepository;
 
@@ -33,5 +34,9 @@ public class MascotaService {
 	public List<Mascota> listarPorCliente(Long clienteId){
 		return mascotaRepository.findByClienteId(clienteId);
 	}
+	
+	public List<Mascota> listarPorCliente(Cliente cliente) {
+        return mascotaRepository.findByCliente(cliente);
+    }
 	
 }

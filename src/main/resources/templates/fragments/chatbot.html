@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="chatbot">
+
+    <!-- CSRF TOKEN -->
+    <input type="hidden" id="csrf-token"
+           th:name="${_csrf.parameterName}"
+           th:value="${_csrf.token}" />
+
+    <!-- CHATBOT -->
+    <div th:if="${#authorization.expression('isAuthenticated()')}">
+
+        <div id="chat-button" onclick="toggleChat()"
+             style="position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: var(--accent);
+                    border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;
+                    font-size: 28px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+                    z-index: 1000; transition: transform 0.3s;">
+            <i class="fa-solid fa-comment-dots"></i>
+        </div>
+
+        <div id="chat-window"
+             style="display: none; position: fixed; bottom: 100px; right: 30px; width: 350px; height: 450px;
+                    background: white; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+                    z-index: 1000; flex-direction: column; overflow: hidden; border: 1px solid #ddd;">
+
+            <div style="background: var(--accent); padding: 15px; color: white; font-weight: 700;
+                        display: flex; justify-content: space-between; align-items: center;">
+                <span><i class="fa-solid fa-paw"></i> Asistente SuperPet</span>
+                <i class="fa-solid fa-xmark" onclick="toggleChat()" style="cursor: pointer;"></i>
+            </div>
+
+            <div id="chat-messages"
+                 style="flex: 1; padding: 15px; overflow-y: auto; background: #f9f9f9;
+                        display: flex; flex-direction: column; gap: 10px; font-size: 14px;">
+                <div style="background: #eee; padding: 10px; border-radius: 15px 15px 15px 0;
+                            align-self: flex-start; max-width: 80%;">
+                    ¡Hola! Soy tu asistente IA. ¿En qué puedo ayudarte hoy? 🐾
+                </div>
+            </div>
+
+            <div style="padding: 15px; border-top: 1px solid #eee; display: flex; gap: 10px;">
+                <input type="text" id="chat-input" placeholder="Escribe aquí..."
+                       style="flex: 1; border: 1px solid #ddd; padding: 8px 12px;
+                              border-radius: 20px; outline: none;">
+                <button onclick="enviarMensaje()"
+                        style="background: var(--accent); border: none; color: white; width: 35px;
+                               height: 35px; border-radius: 50%; cursor: pointer;">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script th:inline="javascript">
+        function toggleChat() {
+            const chatWindow = document.getElementById('chat-window');
+            const isVisible = chatWindow.style.display === 'flex';
+            chatWindow.style.display = isVisible ? 'none' : 'flex';
+        }
+
+        async function enviarMensaje() {
+            const input = document.getElementById('chat-input');
+            const container = document.getElementById('chat-messages');
+            const mensaje = input.value.trim();
+
+            if (!mensaje) return;
+
+            container.innerHTML += `
+                <div style="background: var(--accent); color: white; padding: 10px;
+                            border-radius: 15px 15px 0 15px; align-self: flex-end; max-width: 80%;">
+                    ${mensaje}
+                </div>
+            `;
+            input.value = '';
+
+            const typingId = "typing-" + Date.now();
+            container.innerHTML += `
+                <div id="${typingId}" style="background:#eee; padding:10px; border-radius:15px;
+                            align-self:flex-start; max-width:80%; font-size:12px;">
+                    Escribiendo... 🐾
+                </div>
+            `;
+            container.scrollTop = container.scrollHeight;
+
+            try {
+                const csrfToken = document.getElementById('csrf-token')?.value;
+
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    body: JSON.stringify({ mensaje: mensaje })
+                });
+
+                const data = await response.json();
+
+                const typingElement = document.getElementById(typingId);
+                if (typingElement) typingElement.remove();
+
+                let respuestaTexto = (data && data.mensaje)
+                    ? data.mensaje
+                    : "Lo siento, ocurrió un problema 🐾";
+
+                let botHtml = `
+                    <div style="background: #eee; padding: 10px; border-radius: 15px 15px 15px 0;
+                                align-self: flex-start; max-width: 80%;">
+                        ${respuestaTexto}
+                `;
+
+                if (data && data.accion) {
+                    botHtml += `
+                        <br>
+                        <a href="${data.accion.url}">
+                            <button style="margin-top:8px; background:var(--accent); color:white;
+                                           border:none; padding:5px 10px; border-radius:10px;
+                                           cursor:pointer; font-size:12px; font-weight:600;">
+                                ${data.accion.texto}
+                            </button>
+                        </a>
+                    `;
+                }
+
+                botHtml += `</div>`;
+                container.innerHTML += botHtml;
+                container.scrollTop = container.scrollHeight;
+
+            } catch (error) {
+                const typingElement = document.getElementById(typingId);
+                if (typingElement) typingElement.remove();
+
+                container.innerHTML += `
+                    <div style="background: #ffdddd; color: #a00; padding: 10px;
+                                border-radius: 15px; align-self: flex-start; font-size: 12px;">
+                        Error de conexión con el servidor.
+                    </div>
+                `;
+                container.scrollTop = container.scrollHeight;
+            }
+        }
+
+        document.getElementById('chat-input')?.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') enviarMensaje();
+        });
+    </script>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Carrito de Compras</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700;800&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+	
+	<style>
+		
+		:root {
+		    --bg: #fef6ed;
+		    --white: #ffffff;
+		    --accent: #ff9800;
+		    --accent-dark: #e68900;
+		    --danger: #dc3545;
+		    --danger-dark: #b02a37;
+		    --text: #333;
+		    --muted: #777;
+		    --shadow: 0 6px 18px rgba(0,0,0,.10);
+		    --radius: 18px;
+		}
+
+		/* CONTENEDOR PRINCIPAL */
+		main {
+		    max-width: 1100px;
+		    margin: 100px auto 50px;
+		    padding: 0 25px;
+		}
+
+		/* TARJETA */
+		.page-card {
+		    background: var(--white);
+		    border-radius: var(--radius);
+		    box-shadow: var(--shadow);
+		    padding: 30px;
+		}
+
+		/* TITULO Y SUB */
+		.page-card h1 {
+		    font-size: 32px;
+		    font-weight: 900;
+		    margin-bottom: 10px;
+		}
+
+		.subtitle {
+		    font-size: 15px;
+		    color: var(--muted);
+		    margin-bottom: 25px;
+		}
+
+		/* EMPTY STATE */
+		.empty-state {
+		    background: #fff3e0;
+		    border: 1px solid #ffd49d;
+		    border-radius: var(--radius);
+		    padding: 30px;
+		    text-align: center;
+		}
+
+		.empty-state p {
+		    font-size: 18px;
+		    font-weight: 700;
+		    margin-bottom: 18px;
+		    color: var(--text);
+		}
+
+		/* TABLA */
+		table {
+		    width: 100%;
+		    border-collapse: collapse;
+		    overflow: hidden;
+		    border-radius: 14px;
+		    margin-top: 10px;
+		}
+
+		thead th {
+		    background: #fff3e0;
+		    padding: 14px;
+		    text-align: left;
+		    font-size: 14px;
+		    font-weight: 900;
+		    color: var(--text);
+		}
+
+		tbody td {
+		    padding: 14px;
+		    border-bottom: 1px solid #eee;
+		    font-size: 14px;
+		}
+
+		tbody tr:hover td {
+		    background: #fafafa;
+		}
+
+		/* PRECIO */
+		.price {
+		    font-weight: 800;
+		    color: var(--accent-dark);
+		}
+
+		/* TOTAL */
+		.total-box {
+		    margin-top: 25px;
+		    background: #fff3e0;
+		    border-radius: 14px;
+		    padding: 18px 20px;
+		    display: flex;
+		    justify-content: space-between;
+		    align-items: center;
+		    font-size: 18px;
+		    font-weight: 900;
+		}
+
+		.total-box span {
+		    color: var(--accent-dark);
+		}
+
+		/* BOTONES */
+		.buttons-row {
+		    margin-top: 25px;
+		    display: flex;
+		    gap: 12px;
+		    justify-content: flex-end;
+		    flex-wrap: wrap;
+		}
+
+		.btn {
+		    border: none;
+		    cursor: pointer;
+		    padding: 10px 20px;
+		    border-radius: 22px;
+		    font-weight: 800;
+		    font-size: 14px;
+		    transition: 0.2s ease;
+		}
+
+		.btn-primary {
+		    background: var(--accent);
+		    color: white;
+		}
+
+		.btn-primary:hover {
+		    background: var(--accent-dark);
+		}
+
+		.btn-danger {
+		    background: var(--danger);
+		    color: white;
+		}
+
+		.btn-danger:hover {
+		    background: var(--danger-dark);
+		}
+
+		/* LINK QUITAR */
+		.btn-link-danger {
+		    font-weight: 800;
+		    color: var(--danger);
+		    text-decoration: none;
+		}
+
+		.btn-link-danger:hover {
+		    text-decoration: underline;
+		}
+
+		/* RESPONSIVE */
+		@media(max-width: 768px) {
+		    .page-card {
+		        padding: 22px;
+		    }
+
+		    .page-card h1 {
+		        font-size: 26px;
+		    }
+
+		    thead th,
+		    tbody td {
+		        padding: 10px;
+		        font-size: 13px;
+		    }
+
+		    .total-box {
+		        flex-direction: column;
+		        gap: 10px;
+		        text-align: center;
+		    }
+
+		    .buttons-row {
+		        justify-content: center;
+		    }
+		}
+
+	</style>
+	
+</head>
+
+<body>
+
+	<div th:replace="~{fragments/header :: header}"></div>
+
+	    <main>
+	        <div class="page-card">
+
+	            <h1>🛒 Mi Carrito</h1>
+	            <p class="subtitle">Revisa tus productos antes de confirmar tu pedido.</p>
+
+	            <!-- CARRITO VACÍO -->
+	            <div th:if="${#lists.isEmpty(items)}" class="empty-state">
+	                <p>Tu carrito está vacío 🐾</p>
+	                <a th:href="@{/productos}" class="btn btn-primary">Volver a productos</a>
+	            </div>
+
+	            <!-- CARRITO CON ITEMS -->
+	            <div th:if="${!#lists.isEmpty(items)}">
+
+	                <table>
+	                    <thead>
+	                        <tr>
+	                            <th>Producto</th>
+	                            <th>Precio</th>
+	                            <th>Cantidad</th>
+	                            <th>Subtotal</th>
+	                            <th>Acción</th>
+	                        </tr>
+	                    </thead>
+	                    <tbody>
+	                        <tr th:each="item : ${items}">
+	                            <td th:text="${item.nombre}"></td>
+
+	                            <td class="price">
+	                                S/ <span th:text="${item.precio}"></span>
+	                            </td>
+
+	                            <td th:text="${item.cantidad}"></td>
+
+	                            <td class="price">
+	                                S/ <span th:text="${item.subtotal}"></span>
+	                            </td>
+
+	                            <td>
+	                                <a class="btn-link-danger"
+	                                   th:href="@{/carrito/quitar/{id}(id=${item.idProducto})}">
+	                                    ❌ Quitar
+	                                </a>
+	                            </td>
+	                        </tr>
+	                    </tbody>
+	                </table>
+
+	                <div class="total-box">
+	                    <div>Total del carrito:</div>
+	                    <div>S/ <span th:text="${total}"></span></div>
+	                </div>
+
+	                <div class="buttons-row">
+	                    <form th:action="@{/carrito/limpiar}" method="post">
+	                        <button type="submit" class="btn btn-danger">🧹 Vaciar carrito</button>
+	                    </form>
+
+	                    <form th:action="@{/pedido/confirmar}" method="post">
+	                        <button type="submit" class="btn btn-primary">✅ Confirmar pedido</button>
+	                    </form>
+	                </div>
+
+	            </div>
+
+	        </div>
+	    </main>
+		
+
+	    <!-- FOOTER -->
+	    <div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+</html>

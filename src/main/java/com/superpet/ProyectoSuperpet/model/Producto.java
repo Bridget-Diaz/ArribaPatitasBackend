@@ -23,8 +23,9 @@ public class Producto {
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal precio;
 
-    @Column(columnDefinition = "INT DEFAULT 0")
-    private Integer stock;
+    @Column(nullable = false)
+    private Integer stock = 0;
+
 
 	public Long getId() {
 		return id;

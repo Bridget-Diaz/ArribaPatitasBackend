@@ -12,6 +12,8 @@ public class ProductoDTO {
     
     //sobrecarga?
     //no hubo sobrecarga :(
+    
+    // de echo tienes dos controllers.. :v asi que si p
     public ProductoDTO() {}
 
     public ProductoDTO(Long id, String nombre, String descripcion, BigDecimal precio, Integer stock) {

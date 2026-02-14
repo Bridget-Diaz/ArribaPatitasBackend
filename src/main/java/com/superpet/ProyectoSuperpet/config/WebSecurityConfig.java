@@ -1,6 +1,5 @@
 package com.superpet.ProyectoSuperpet.config;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,67 +8,79 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-
 import com.superpet.ProyectoSuperpet.service.UsuarioDetailsService;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
-
-	@Autowired
+    
+    @Autowired
     private UsuarioDetailsService usuarioDetalle;
+    
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            // 🔴 CSRF OFF para APIs
+            .csrf(csrf -> csrf
+                .ignoringRequestMatchers("/api/**")
+            )
 
-	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-	    http
-	        .csrf(csrf -> csrf
-	            .ignoringRequestMatchers("/api/**", "/registro", "/logout") // Desactiva CSRF para APIs y registro y logout
-	            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // Usa cookies para CSRF
-	        )
-	        .authorizeHttpRequests(auth -> auth
-	            .requestMatchers("/", "/login", "/registro", "/productos/listar","/mascotas/listar", 
-	                           "/css/*", "/js/*", "/home", "/menu").permitAll()
-	            .requestMatchers("/miperfil").authenticated()
-	            .requestMatchers("/mascotas/**","/citas/**").hasRole("CLIENTE")
-	            .requestMatchers("/api/productos/**").permitAll()
-	            .requestMatchers("/api/mascotas/**").permitAll()
-	            .requestMatchers("/api/servicios/**").permitAll()
-	            .requestMatchers("/api/clientes/**").permitAll()
-	            .anyRequest().authenticated()
-	        )
-	        .formLogin(form -> form
-	            .loginPage("/login")
-	            .defaultSuccessUrl("/menu", true)
-	            .permitAll()
-	        )
-	        .logout(logout -> logout
-	            .logoutUrl("/logout")
-	            .logoutSuccessUrl("/")
-	            .permitAll()
-	        );
+            // 🔐 AUTORIZACIÓN
+            .authorizeHttpRequests(auth -> auth
+            		// ✅ DESPUÉS (permite acceso sin login)
+            		.requestMatchers("/api/**").permitAll()
 
-	    return http.build();
-	}
-	
-	
+                // ADMIN
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+
+                // públicas web
+                .requestMatchers("/", "/login", "/registro",
+                                 "/css/**", "/js/**", "/home", "/menu")
+                .permitAll()
+
+                // web protegidas
+                .requestMatchers("/chat", "/miperfil").authenticated()
+                .requestMatchers("/mascotas/**", "/citas/**").hasRole("CLIENTE")
+
+                .anyRequest().authenticated()
+            )
+
+            // 🌐 FORM LOGIN (solo web)
+            .formLogin(form -> form
+                .loginPage("/login")
+                .defaultSuccessUrl("/menu", true)
+                .permitAll()
+            )
+
+            // 🚪 LOGOUT (web)
+            .logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+            )
+
+            .httpBasic();
+
+        return http.build();
+    }
+
+
+    
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
         return http.getSharedObject(AuthenticationManagerBuilder.class)
-            .userDetailsService(usuarioDetalle)   //ahora funciona :v
+            .userDetailsService(usuarioDetalle)
             .passwordEncoder(passwordEncoder())
             .and()
             .build();
     }
-
-
-    //de anterior proyecto 
+    
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }
