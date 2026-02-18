@@ -38,7 +38,7 @@ public class RegistroController {
 
     @GetMapping("/registro")
     public String mostrarFormulario() {
-        return "home"; // Apunta a la vista home
+        return "registro";//"home"; // Apunta a la vista home
     }
 
     @PostMapping("/registro")
@@ -84,6 +84,7 @@ public class RegistroController {
         } catch (Exception e) {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("error", "Error al registrar: " + e.getMessage());
+            System.out.println("REGISTRANDO USUARIO: " + email);
             return "redirect:/";
         }
     }

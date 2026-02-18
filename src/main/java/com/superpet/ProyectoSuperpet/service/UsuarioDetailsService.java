@@ -30,36 +30,51 @@ public class UsuarioDetailsService implements UserDetailsService{
 	private UsuarioService usuarioService;
 	
 	
-    public UserDetails loadUserByEmail(String email) throws UsernameNotFoundException {
-        Usuario usuario = usuarioService.buscarPorEmail(email);
-        if (usuario == null) {
-            throw new UsernameNotFoundException("Email no encontrado");
-        }
+//    public UserDetails loadUserByEmail(String email) throws UsernameNotFoundException {
+//        Usuario usuario = usuarioService.buscarPorEmail(email);
+//        if (usuario == null) {
+//            throw new UsernameNotFoundException("Email no encontrado");
+//        }
+//
+//        List<SimpleGrantedAuthority> authorities = List.of(
+//        	    new SimpleGrantedAuthority(usuario.getRol().getNombre())
+//        	);
+//
+//
+//        return new org.springframework.security.core.userdetails.User(
+//            usuario.getEmail(),
+//            usuario.getPassword(), // SIN encriptar
+//            authorities
+//        );
+//    }
+//
+//
+//    @Override
+//    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+//        Usuario usuario = usuarioRepo.findByEmail(email);
+//        if (usuario == null) {
+//            throw new UsernameNotFoundException("Usuario no encontrado con email: " + email);
+//        }
+//        return new org.springframework.security.core.userdetails.User(
+//            usuario.getEmail(),
+//            usuario.getPassword(),
+//            List.of(new SimpleGrantedAuthority("ROLE_" + usuario.getRol().getNombre()))
+//        );
+//    }
+	@Override
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        List<SimpleGrantedAuthority> authorities = List.of(
-        	    new SimpleGrantedAuthority(usuario.getRol().getNombre())
-        	);
+	    Usuario usuario = usuarioRepo.findByEmail(email);
+	    if (usuario == null) {
+	        throw new UsernameNotFoundException("Usuario no encontrado con email: " + email);
+	    }
 
+	    return new org.springframework.security.core.userdetails.User(
+	        usuario.getEmail(),
+	        usuario.getPassword(),
+	        List.of(new SimpleGrantedAuthority("ROLE_" + usuario.getRol().getNombre()))
+	    );
+	}
 
-        return new org.springframework.security.core.userdetails.User(
-            usuario.getEmail(),
-            usuario.getPassword(), // SIN encriptar
-            authorities
-        );
-    }
-
-
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Usuario usuario = usuarioRepo.findByEmail(email);
-        if (usuario == null) {
-            throw new UsernameNotFoundException("Usuario no encontrado con email: " + email);
-        }
-        return new org.springframework.security.core.userdetails.User(
-            usuario.getEmail(),
-            usuario.getPassword(),
-            List.of(new SimpleGrantedAuthority("ROLE_" + usuario.getRol().getNombre()))
-        );
-    }
 
 }

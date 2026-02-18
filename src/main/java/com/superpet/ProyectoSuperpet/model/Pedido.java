@@ -17,7 +17,7 @@ public class Pedido {
     @JoinColumn(name = "id_cliente", nullable = false, foreignKey = @ForeignKey(name = "Pedidos_Clientes_fk"))
     private Cliente cliente;
 
-    @Column(name = "fecha_pedido")
+    @Column(name="fecha_pedido", nullable = false)
     private LocalDateTime fechaPedido;
 
     @Column(nullable = false, precision = 10, scale = 2)
@@ -29,6 +29,15 @@ public class Pedido {
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DetallePedido> detalles;
 
+    
+ 
+    @PrePersist
+    public void prePersist() {
+        this.fechaPedido = LocalDateTime.now();
+    }
+
+
+    
 	public Long getId() {
 		return id;
 	}

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle del Producto | SuperPet</title>
+
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+
+    <style>
+        /* =====================
+           VARIABLES
+        ====================== */
+        :root {
+            --bg: #fef6ed;
+            --white: #ffffff;
+            --gray: #ededf1;
+            --accent: #ff9800;
+            --text: #333;
+            --danger: #dc3545;
+        }
+
+        /* =====================
+           RESET / BASE
+        ====================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Poppins", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.4;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* =====================
+           HEADER / NAV
+        ====================== */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 72px;
+            background: var(--white);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 32px;
+            box-shadow: 0 6px 16px rgba(0,0,0,.08);
+            z-index: 1000;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+        }
+
+        .logo {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--accent), #f58500);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 24px;
+            list-style: none;
+        }
+
+        nav a {
+            font-weight: 600;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+        }
+
+        .btn-login,
+        .btn-logout {
+            padding: 8px 16px;
+            border-radius: 22px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            color: #fff;
+        }
+
+        .btn-login { background: var(--accent); }
+        .btn-logout { background: var(--danger); }
+
+        /* =====================
+           MAIN - DETALLE
+        ====================== */
+        main {
+            padding: 120px 40px 40px;
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .detalle-card {
+            display: flex;
+            gap: 40px;
+            background: var(--white);
+            padding: 32px;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,.1);
+        }
+
+        .imagen {
+            font-size: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .info {
+            flex: 1;
+        }
+
+        .info h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .descripcion {
+            color: #555;
+            margin: 15px 0;
+        }
+
+        .precio {
+            font-size: 20px;
+            margin: 10px 0;
+        }
+
+        .stock {
+            font-weight: 700;
+            color: #2e7d32;
+        }
+
+        .btn-disabled {
+            margin-top: 20px;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .volver {
+            display: inline-block;
+            margin-top: 16px;
+            color: #4CAF50;
+            font-weight: 600;
+        }
+
+        /* =====================
+           FOOTER
+        ====================== */
+        footer {
+            margin-top: 60px;
+            background: var(--accent);
+            color: #fff;
+            padding: 32px;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .footer-grid {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .footer-col h4 {
+            margin-bottom: 12px;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col li {
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        /* =====================
+           RESPONSIVE
+        ====================== */
+        @media (max-width: 768px) {
+            .detalle-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            nav ul {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="brand">
+        <div class="logo">🐾</div>
+        <span>Arriba Patitas</span>
+    </div>
+
+    <nav>
+        <ul>
+            <li><a th:href="@{/menu}">SERVICIOS</a></li>
+            <li><a th:href="@{/productos}">PRODUCTOS</a></li>
+            <li><a th:href="@{/mis-citas}">MIS CITAS</a></li>
+        </ul>
+    </nav>
+
+    <div th:if="${#authorization.expression('isAuthenticated()')}" style="display:flex;gap:10px;">
+        <a th:href="@{/miperfil}">
+            <button class="btn-login">PERFIL</button>
+        </a>
+        <form th:action="@{/logout}" method="post">
+            <button class="btn-logout">SALIR</button>
+        </form>
+    </div>
+</header>
+
+<main>
+    <div class="detalle-card">
+        <div class="imagen">🐶</div>
+
+        <div class="info">
+            <h1 th:text="${producto.nombre}">Nombre</h1>
+
+            <p class="descripcion" th:text="${producto.descripcion}">
+                Descripción
+            </p>
+
+            <p class="precio">
+                Precio:
+                <strong th:text="'S/ ' + ${producto.precio}">S/ 0.00</strong>
+            </p>
+
+            <p class="stock" th:text="'Stock disponible: ' + ${producto.stock}">
+                Stock
+            </p>
+
+			
+			<form th:action="@{/carrito/agregar/{id}(id=${producto.id})}" 
+			      method="post" 
+			      style="margin-top:20px;">
+
+			    <label for="cantidad">Cantidad</label>
+			    <input type="number"
+			           id="cantidad"
+			           name="cantidad"
+			           min="1"
+			           th:attr="max=${producto.stock}"
+			           value="1"
+			           required
+			           style="width:100%;padding:8px;margin:10px 0;">
+
+			    <button type="submit"
+			            style="width:100%;
+			                   padding:12px;
+			                   border:none;
+			                   border-radius:8px;
+			                   background:#ff9800;
+			                   color:white;
+			                   font-weight:700;
+			                   cursor:pointer;">
+			        Agregar al carrito
+			    </button>
+			</form>
+
+			<a th:href="@{/productos}" class="volver">← Volver</a>
+        </div>
+    </div>
+</main>
+
+
+
+
+<footer>
+		<div class="footer-grid">
+			<div class="footer-col">
+				<div style="display:flex;align-items:center;gap:10px;">
+					<div
+						style="width:56px;height:56px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;">
+						<i class="fa-solid fa-paw" style="color:var(--accent);font-size:22px"></i>
+					</div>
+				</div>
+			</div>
+
+			<div class="footer-col">
+				<h4>Navegación</h4>
+				<ul>
+				    <li><a th:href="@{/menu}">SERVICIOS</a></li>
+					<li><a th:href="@{/mis-citas}">MIS CITAS</a></li>
+				</ul>
+			</div>
+
+			<div class="footer-col">
+				<h4>Contacto</h4>
+				<ul>
+					<li>
+						<a href="https://wa.me/51987224378" target="_blank" rel="noopener">
+							<i class="fab fa-whatsapp"></i> WhatsApp
+						</a>
+					</li>
+					<li>
+						<a href="https://www.google.com/maps/place/VETERINARIA+PUPPYVET/@-11.8900727,-77.0727252,21z/data=!4m6!3m5!1s0x9105d1d9dac244c1:0x99ce188372d7de7a!8m2!3d-11.8901703!4d-77.0727273!16s%2Fg%2F11jzb_bp5h?entry=ttu&g_ep=EgoyMDI1MDgxOS4wIKXMDSoASAFQAw%3D%3D"
+							target="_blank" rel="noopener">
+							<i class="fas fa-map-marker-alt"></i> Dirección
+						</a>
+					</li>
+				</ul>
+			</div>
+
+			<div class="footer-col">
+				<h4>Cuenta</h4>
+				<ul>
+					<li><a th:href="@{/miperfil}">MI PERFIL</a></li>
+					<li>
+						<form th:action="@{/logout}" method="post" style="display:inline;">
+							<a href="#" onclick="this.parentNode.submit(); return false;">CERRAR SESIÓN</a>
+						</form>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</footer>
+
+</body>
+</html>

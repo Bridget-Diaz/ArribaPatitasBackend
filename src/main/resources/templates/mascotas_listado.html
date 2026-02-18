@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Mis Mascotas 🐾</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+
+    <style>
+        /* ====== ESTILOS SOLO PARA ESTA VISTA ====== */
+
+        .page-card h2 {
+            text-align: center;
+            font-weight: 800;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        .tabla-mascotas {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: #fff;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        .tabla-mascotas thead {
+            background: linear-gradient(135deg, #ff9800, #ff7a00);
+            color: #fff;
+        }
+
+        .tabla-mascotas th {
+            padding: 14px 12px;
+            text-align: left;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tabla-mascotas td {
+            padding: 14px 12px;
+            font-size: 15px;
+            color: #444;
+        }
+
+        /* filas intercaladas */
+        .tabla-mascotas tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        /* hover */
+        .tabla-mascotas tbody tr:hover {
+            background-color: #fff3e0;
+            transition: background 0.2s ease;
+        }
+
+        /* fila vacía */
+        .tabla-vacia {
+            text-align: center;
+            padding: 30px;
+            font-style: italic;
+            color: #888;
+            background: #fafafa;
+        }
+
+        /* botón volver centrado */
+        .acciones {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        /* responsive */
+        @media (max-width: 700px) {
+            .tabla-mascotas thead {
+                display: none;
+            }
+
+            .tabla-mascotas tr {
+                display: block;
+                margin-bottom: 15px;
+                border-radius: 12px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+                background: #fff;
+            }
+
+            .tabla-mascotas td {
+                display: flex;
+                justify-content: space-between;
+                padding: 12px 16px;
+                border-bottom: 1px solid #eee;
+            }
+
+            .tabla-mascotas td::before {
+                content: attr(data-label);
+                font-weight: 700;
+                color: #ff9800;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div th:replace="fragments/header :: header"></div>
+
+<main class="page-wrap">
+    <div class="page-card">
+
+        <h2>🐾 Mascotas Registradas</h2>
+
+        <table class="tabla-mascotas">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Especie</th>
+                    <th>Raza</th>
+                    <th>Edad</th>
+                    <th>Peso (kg)</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr th:each="m : ${mascotas}">
+                    <td data-label="Nombre" th:text="${m.nombre}"></td>
+                    <td data-label="Especie" th:text="${m.especie}"></td>
+                    <td data-label="Raza" th:text="${m.raza}"></td>
+                    <td data-label="Edad" th:text="${m.edad}"></td>
+                    <td data-label="Peso (kg)" th:text="${m.peso}"></td>
+                </tr>
+
+                <tr th:if="${#lists.isEmpty(mascotas)}">
+                    <td colspan="5" class="tabla-vacia">
+                        No tienes mascotas registradas 🐶
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        <div class="acciones">
+            <a th:href="@{/menu}" class="btn-action">
+                ⬅ Volver
+            </a>
+        </div>
+
+    </div>
+</main>
+
+</body>
+</html>

@@ -44,6 +44,20 @@ public class MascotaVISTACONTROLADOR {
       model.addAttribute("mascota", new Mascota());
       return "form_mascota"; 
   }
+  
+  @GetMapping("/mis-mascotas")
+  public String listarMascotas(Authentication auth, Model model) {
+
+      String email = auth.getName();
+      Usuario usuario = usuarService.buscarPorEmail(email);
+
+      model.addAttribute(
+          "mascotas",
+          mascoServiec.listarPorCliente(usuario.getCliente())
+      );
+
+      return "mascotas_listado";
+  }
 
 	
 }

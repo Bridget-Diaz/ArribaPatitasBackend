@@ -1,0 +1,49 @@
+<footer>
+		<div class="footer-grid">
+			<div class="footer-col">
+				<div style="display:flex;align-items:center;gap:10px;">
+					<div
+						style="width:56px;height:56px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;">
+						<i class="fa-solid fa-paw" style="color:var(--accent);font-size:22px"></i>
+					</div>
+				</div>
+			</div>
+
+			<div class="footer-col">
+				<h4>Navegación</h4>
+				<ul>
+				    <li><a th:href="@{/menu}">SERVICIOS</a></li>
+					<li><a th:href="@{/mis-citas}">MIS CITAS</a></li>
+				</ul>
+			</div>
+
+			<div class="footer-col">
+				<h4>Contacto</h4>
+				<ul>
+					<li>
+						<a href="https://wa.me/51987224378" target="_blank" rel="noopener">
+							<i class="fab fa-whatsapp"></i> WhatsApp
+						</a>
+					</li>
+					<li>
+						<a href="https://www.google.com/maps/place/VETERINARIA+PUPPYVET/@-11.8900727,-77.0727252,21z/data=!4m6!3m5!1s0x9105d1d9dac244c1:0x99ce188372d7de7a!8m2!3d-11.8901703!4d-77.0727273!16s%2Fg%2F11jzb_bp5h?entry=ttu&g_ep=EgoyMDI1MDgxOS4wIKXMDSoASAFQAw%3D%3D"
+							target="_blank" rel="noopener">
+							<i class="fas fa-map-marker-alt"></i> Dirección
+						</a>
+					</li>
+				</ul>
+			</div>
+
+			<div class="footer-col">
+				<h4>Cuenta</h4>
+				<ul>
+					<li><a th:href="@{/miperfil}">MI PERFIL</a></li>
+					<li>
+						<form th:action="@{/logout}" method="post" style="display:inline;">
+							<a href="#" onclick="this.parentNode.submit(); return false;">CERRAR SESIÓN</a>
+						</form>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</footer>

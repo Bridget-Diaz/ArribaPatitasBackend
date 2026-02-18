@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat Veterinaria</title>
+</head>
+<body>
+
+<h2>Chat Veterinaria 🐾</h2>
+
+<input type="text" id="mensaje" placeholder="Escribe tu mensaje">
+<button onclick="enviar()">Enviar</button>
+
+<div id="respuesta"></div>
+
+<script>
+function enviar() {
+    const mensaje = document.getElementById("mensaje").value;
+
+    fetch('/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mensaje })
+    })
+    .then(r => r.json())
+    .then(data => {
+        let html = `<p>${data.mensaje}</p>`;
+        if (data.accion) {
+            html += `<a href="${data.accion.url}">
+                        <button>${data.accion.texto}</button>
+                     </a>`;
+        }
+        document.getElementById("respuesta").innerHTML = html;
+    });
+}
+</script>
+
+</body>
+</html>
