@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Pago del Pedido</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+
+<meta name="_csrf" th:content="${_csrf.token}">
+<meta name="_csrf_header" th:content="${_csrf.headerName}">
+
+<style>
+	/* ===== Pantalla de Pago ===== */
+
+	body {
+	    background: #f4f6f8;
+	}
+
+	.container {
+	    max-width: 420px;
+	    margin: 60px auto;
+	    background: #ffffff;
+	    padding: 30px;
+	    border-radius: 10px;
+	    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+	}
+
+	.container h2 {
+	    text-align: center;
+	    margin-bottom: 20px;
+	    color: #2c3e50;
+	}
+
+	.container p {
+	    font-size: 15px;
+	    margin: 6px 0;
+	}
+
+	.container hr {
+	    margin: 20px 0;
+	    border: none;
+	    border-top: 1px solid #e0e0e0;
+	}
+
+	.container h3 {
+	    margin-bottom: 12px;
+	    font-size: 16px;
+	    color: #34495e;
+	}
+
+	.container label {
+	    display: block;
+	    padding: 10px;
+	    border: 1px solid #ddd;
+	    border-radius: 6px;
+	    margin-bottom: 10px;
+	    cursor: pointer;
+	    transition: border 0.2s, background 0.2s;
+	}
+
+	.container label:hover {
+	    background: #f9f9f9;
+	    border-color: #3498db;
+	}
+
+	.container input[type="radio"] {
+	    margin-right: 8px;
+	}
+
+	.btn-action {
+	    width: 100%;
+	    padding: 12px;
+	    border: none;
+	    background: #27ae60;
+	    color: white;
+	    font-size: 16px;
+	    border-radius: 6px;
+	    cursor: pointer;
+	    transition: background 0.2s;
+	}
+
+	.btn-action:hover {
+	    background: #219150;
+	}
+
+	/* Botón volver */
+	.btn-back {
+	    display: block;
+	    margin-top: 18px;
+	    text-align: center;
+	    text-decoration: none;
+	    color: #555;
+	    font-size: 14px;
+	}
+
+	.btn-back:hover {
+	    text-decoration: underline;
+	}
+
+	.loading {
+	    margin-top: 20px;
+	    text-align: center;
+	    color: #555;
+	}
+
+	.hidden {
+	    display: none;
+	}
+
+	.spinner {
+	    width: 42px;
+	    height: 42px;
+	    border: 4px solid #e0e0e0;
+	    border-top: 4px solid #27ae60;
+	    border-radius: 50%;
+	    margin: 0 auto 10px;
+	    animation: spin 1s linear infinite;
+	}
+
+	@keyframes spin {
+	    to {
+	        transform: rotate(360deg);
+	    }
+	}
+
+</style>
+
+<body>
+
+<div class="container">
+
+    <h2>💳 Confirmar Pago</h2>
+
+    <p><strong>N° Pedido:</strong> <span th:text="${pedido.id}"></span></p>
+    <p><strong>Total a pagar:</strong> S/. <span th:text="${pedido.total}"></span></p>
+
+    <hr>
+
+    <h3>Método de pago (simulado)</h3>
+
+	<form id="formPago">
+
+        <label>
+            <input type="radio" name="metodo" value="YAPE" checked>
+            💸 Yape (simulado)
+        </label><br>
+
+        <label>
+            <input type="radio" name="metodo" value="TARJETA">
+            💳 Tarjeta (simulado)
+        </label><br><br>
+
+		<button type="submit" class="btn-action">
+		    ✅ Confirmar Pago
+		</button>
+
+		
+		<div id="loading" class="loading hidden">
+		    <div class="spinner"></div>
+		    <p>Procesando pago...</p>
+		</div>
+
+		<div id="success" class="success-box hidden">
+		    <div class="check">✔</div>
+		    <h3>Pago realizado con éxito</h3>
+		    <a href="/pedido/mis-pedidos" class="btn-action">📦 Ver pedidos</a>
+		</div>
+
+		<div id="error" class="error-box hidden">
+		    <h3>❌ Error en el pago</h3>
+		    <p>Intenta nuevamente</p>
+		    <button onclick="location.reload()" class="btn-action">↩ Reintentar</button>
+		</div>
+
+
+		</form>
+
+		<a th:href="@{/pedido/mis-pedidos}" class="btn-back">
+		    ⬅ Volver a mis pedidos
+		</a>
+
+    </form>
+
+</div>
+
+</body>
+
+<script>
+document.getElementById("formPago").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const btn = document.querySelector(".btn-action");
+    btn.style.display = "none";
+
+    document.getElementById("loading").classList.remove("hidden");
+
+    const pedidoId = "[[${pedido.id}]]";
+
+    // CSRF
+    const token = document.querySelector('meta[name="_csrf"]').content;
+    const header = document.querySelector('meta[name="_csrf_header"]').content;
+
+    setTimeout(() => {
+        fetch(`/pedido/confirmar-pago/${pedidoId}`, {
+            method: "POST",
+            headers: {
+                [header]: token
+            }
+        })
+        .then(res => {
+            document.getElementById("loading").classList.add("hidden");
+
+            if (res.ok) {
+                document.getElementById("success").classList.remove("hidden");
+            } else {
+                document.getElementById("error").classList.remove("hidden");
+                btn.style.display = "block";
+            }
+        })
+        .catch(() => {
+            document.getElementById("loading").classList.add("hidden");
+            document.getElementById("error").classList.remove("hidden");
+            btn.style.display = "block";
+        });
+    }, 1500);
+});
+</script>
+
+
+</html>

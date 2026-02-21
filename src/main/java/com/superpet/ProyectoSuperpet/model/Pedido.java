@@ -23,15 +23,31 @@ public class Pedido {
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal total;
 
-    @Column(length = 20)
-    private String estado; // Pendiente, Enviado, Entregado, Cancelado
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20, nullable = false)
+    private EstadoPedido estado;
+
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DetallePedido> detalles;
 
+    private LocalDateTime fechaLimitePago;
+
     
  
-    @PrePersist
+    public LocalDateTime getFechaLimitePago() {
+		return fechaLimitePago;
+	}
+
+
+
+	public void setFechaLimitePago(LocalDateTime fechaLimitePago) {
+		this.fechaLimitePago = fechaLimitePago;
+	}
+
+
+
+	@PrePersist
     public void prePersist() {
         this.fechaPedido = LocalDateTime.now();
     }
@@ -70,13 +86,19 @@ public class Pedido {
 		this.total = total;
 	}
 
-	public String getEstado() {
+	
+
+	public EstadoPedido getEstado() {
 		return estado;
 	}
 
-	public void setEstado(String estado) {
+
+
+	public void setEstado(EstadoPedido estado) {
 		this.estado = estado;
 	}
+
+
 
 	public List<DetallePedido> getDetalles() {
 		return detalles;

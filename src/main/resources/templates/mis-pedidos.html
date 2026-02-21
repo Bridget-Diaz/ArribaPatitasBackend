@@ -845,6 +845,22 @@
 	           <div class="total">
 	               Total: <span th:text="'S/ ' + ${pedido.total}">S/ 0.00</span>
 	           </div>
+			   
+			   <div style="margin-top: 15px; text-align: right;">
+
+			       <a th:if="${pedido.estado.name() == 'PENDIENTE'}"
+			          th:href="@{/pedido/pago/{id}(id=${pedido.id})}"
+			          class="btn-action">
+			          💳 Pagar
+			       </a>
+
+			       <span th:if="${pedido.estado.name() == 'PAGADO'}"
+			             style="font-weight: 800; color: green;">
+			           ✅ Pagado
+			       </span>
+
+			   </div>
+
 
 	       
 		       </div>

@@ -85,7 +85,7 @@ public class CitaVISTACONTROLADOR {
 	        model.addAttribute("veterinarios",veterinarios);
 	        model.addAttribute("horariosDisponibles", horariosDisponibles);
 
-	        return "form_cita"; // busca templates/form_cita.html
+	        return "form_cita"; 
 	    }
 
 
@@ -99,17 +99,16 @@ public class CitaVISTACONTROLADOR {
 	        cita.setEstado("Pendiente");
 	        citaService.guardarCita(cita);
 
-	        // 🔸 Mandar mensaje de éxito
+	        
 	        redirectAttrs.addFlashAttribute("mensajeExito", "Cita registrada correctamente");
 
-	        // 🔸 Redirigir nuevamente al formulario (o a la lista si prefieres)
 	        return "redirect:/citas/nueva";
 	    }
 	    
 	    @GetMapping("/descargar/{id}")
 	    public void descargarCitaPdf(@PathVariable Long id, HttpServletResponse response) {
 	        try {
-	            // Buscar la cita
+
 	            Cita cita = citaService.obtenerCitaPorId(id);
 	            if (cita == null) {
 	                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Cita no encontrada");
@@ -125,7 +124,7 @@ public class CitaVISTACONTROLADOR {
 	            com.itextpdf.text.pdf.PdfWriter writer = com.itextpdf.text.pdf.PdfWriter.getInstance(document, response.getOutputStream());
 	            document.open();
 
-	            // 🎨 Definir fuentes
+	            //Definir fuentes
 	            BaseColor naranjaBonito = new BaseColor(255, 152, 0); // 🧡 Naranja elegante
 	            Font tituloFont = new Font(Font.FontFamily.HELVETICA, 20, Font.BOLD, BaseColor.WHITE);
 	            Font subtituloFont = new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD, BaseColor.BLACK);
@@ -133,12 +132,12 @@ public class CitaVISTACONTROLADOR {
 	            Font labelFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.BLACK);
 	            Font footerFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, naranjaBonito);
 
-	            // 🧡 Encabezado naranja bonito
+	            // Encabezado naranja bonito
 	            PdfPTable header = new PdfPTable(1);
 	            header.setWidthPercentage(100);
 	            PdfPCell cell = new PdfPCell(new Phrase("🐾 Patitas Felices - Detalle de Cita", tituloFont));
 	            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	            cell.setBackgroundColor(naranjaBonito); // Fondo naranja bonito
+	            cell.setBackgroundColor(naranjaBonito);
 	            cell.setPadding(15);
 	            cell.setBorder(Rectangle.OUT_BOTTOM);
 	            header.addCell(cell);
@@ -146,14 +145,13 @@ public class CitaVISTACONTROLADOR {
 
 	            document.add(Chunk.NEWLINE);
 
-	            // 📅 Subtítulo en negro
 	            Paragraph subtitulo = new Paragraph("Información general de la cita #" + cita.getId(), subtituloFont);
 	            subtitulo.setAlignment(Element.ALIGN_CENTER);
 	            document.add(subtitulo);
 
 	            document.add(Chunk.NEWLINE);
 
-	            // 🧾 Tabla de detalles
+	            //abla de detalles
 	            PdfPTable table = new PdfPTable(2);
 	            table.setWidthPercentage(90);
 	            table.setSpacingBefore(15f);
@@ -162,7 +160,7 @@ public class CitaVISTACONTROLADOR {
 
 	            BiConsumer<String, String> addRow = (label, value) -> {
 	                PdfPCell labelCell = new PdfPCell(new Phrase(label, labelFont));
-	                labelCell.setBackgroundColor(new BaseColor(224, 224, 224)); // Gris claro
+	                labelCell.setBackgroundColor(new BaseColor(224, 224, 224)); 
 	                labelCell.setPadding(8);
 	                table.addCell(labelCell);
 
@@ -180,7 +178,7 @@ public class CitaVISTACONTROLADOR {
 	            document.add(Chunk.NEWLINE);
 	            document.add(Chunk.NEWLINE);
 
-	            // 🧡 Pie de página naranja
+	        
 	            Paragraph footer = new Paragraph("Gracias por confiar en Arriba Patitas 🐕‍🦺", footerFont);
 	            footer.setAlignment(Element.ALIGN_CENTER);
 	            footer.setSpacingBefore(30);
