@@ -29,38 +29,30 @@
     <!-- ================= GRID DE PRODUCTOS ================= -->
     <section class="productos-grid">
 
-        <div class="producto-card"
-             th:each="p : ${productos}">
+		<div class="producto-card" th:each="p : ${productos}">
 
-            <div class="producto-icon">
-                <i class="fas fa-paw"></i>
-            </div>
+			<img th:if="${p.imagen != null}"
+			     th:src="${p.imagen}"
+			     style="width:100%; height:180px; object-fit:cover; border-radius:12px;">
 
-            <h3 th:text="${p.nombre}">Nombre Producto</h3>
+			<div th:if="${p.imagen == null}" class="producto-icon">
+			    <i class="fas fa-paw"></i>
+			</div>
 
-            <p class="descripcion"
-               th:text="${p.descripcion}">
-                Descripción del producto
-            </p>
 
-            <div class="info">
-                <span class="precio"
-                      th:text="'S/ ' + ${p.precio}">
-                    S/ 0.00
-                </span>
+		    <h3 th:text="${p.nombre}">Nombre Producto</h3>
 
-                <span class="stock"
-                      th:text="'Stock: ' + ${p.stock}">
-                    Stock: 0
-                </span>
-            </div>
+		    <p class="descripcion" th:text="${p.descripcion}"></p>
 
-			<!-- si este es el btn xd-->
-			<a class="btn-detalle"
-			      th:href="@{/productos/{id}(id=${p.id})}">
-			       Ver detalle
-			   </a>
-        </div>
+		    <div class="info">
+		        <span class="precio" th:text="'S/ ' + ${p.precio}"></span>
+		        <span class="stock" th:text="'Stock: ' + ${p.stock}"></span>
+		    </div>
+
+		    <a class="btn-detalle" th:href="@{/productos/{id}(id=${p.id})}">
+		        Ver detalle
+		    </a>
+		</div>
 
     </section>
 

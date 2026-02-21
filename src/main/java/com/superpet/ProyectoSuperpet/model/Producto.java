@@ -26,6 +26,17 @@ public class Producto {
     @Column(nullable = false)
     private Integer stock = 0;
 
+    @Column(name="imagen")
+    private String imagen;
+    
+    
+	public String getImagen() {
+		return imagen;
+	}
+
+	public void setImagen(String imagen) {
+		this.imagen = imagen;
+	}
 
 	public Long getId() {
 		return id;

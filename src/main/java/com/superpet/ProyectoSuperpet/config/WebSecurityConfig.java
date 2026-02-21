@@ -30,6 +30,9 @@ public class WebSecurityConfig {
 
             // 🔐 AUTORIZACIÓN
             .authorizeHttpRequests(auth -> auth
+            		
+            		//pa las imagenes 
+            		.requestMatchers("/uploads/**").permitAll()
             		// ✅ DESPUÉS (permite acceso sin login)
             		.requestMatchers("/api/**").permitAll()
 

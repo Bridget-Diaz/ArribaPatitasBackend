@@ -1,6 +1,7 @@
 package com.superpet.ProyectoSuperpet.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,13 +10,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.multipart.MultipartFile;
 
 import com.superpet.ProyectoSuperpet.model.ProductoDTO;
-import java.util.List;
-import java.util.stream.Collectors;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import org.springframework.web.multipart.MultipartFile;
 import com.superpet.ProyectoSuperpet.model.Producto;
 import com.superpet.ProyectoSuperpet.service.ProductoService;
 
@@ -76,11 +85,13 @@ public class ProductoController {
             producto.getId(),
             producto.getNombre(),
             producto.getDescripcion(),
-            //fue p sin categoria p no meto un string(ACTUALIZACION :ya pe huevon con un ENUM se lograba crj)
+            producto.getCategoria(),   
             producto.getPrecio(),
-            producto.getStock()
+            producto.getStock(),
+            producto.getImagen()
         );
     }
+
 
     //de dto a entidad en 3 pasos 
     private Producto convertirAEntidad(ProductoDTO dto) {
@@ -88,10 +99,100 @@ public class ProductoController {
         producto.setId(dto.getId());
         producto.setNombre(dto.getNombre());
         producto.setDescripcion(dto.getDescripcion());
+        producto.setCategoria(dto.getCategoria());
         producto.setPrecio(dto.getPrecio());
         producto.setStock(dto.getStock());
+        producto.setImagen(dto.getImagen());
         return producto;
     }
+    
+    
+    
+    
+    @PostMapping("/guardar-con-imagen")
+    public ResponseEntity<ProductoDTO> guardarConImagen(
+            @RequestParam("nombre") String nombre,
+            @RequestParam("descripcion") String descripcion,
+            @RequestParam("categoria") String categoria,
+            @RequestParam("precio") Double precio,
+            @RequestParam("stock") Integer stock,
+            @RequestParam("imagen") MultipartFile imagenFile
+    ) throws IOException {
+
+    	String rutaBase = "C:/Users/Josue/Downloads/Grupo13 proyecto/uploads/productos/";
+        File carpeta = new File(rutaBase);
+
+        if (!carpeta.exists()) {
+            carpeta.mkdirs();
+        }
+
+        // Nombre único para que no se repita
+        String nombreArchivo = UUID.randomUUID() + "_" + imagenFile.getOriginalFilename();
+        Path rutaCompleta = Paths.get(rutaBase + nombreArchivo);
+
+        Files.write(rutaCompleta, imagenFile.getBytes());
+
+        Producto producto = new Producto();
+        producto.setNombre(nombre);
+        producto.setDescripcion(descripcion);
+        producto.setCategoria(categoria);
+        producto.setPrecio(new java.math.BigDecimal(precio));
+        producto.setStock(stock);
+
+        // esta ruta es la que se guardará en BD
+        producto.setImagen("/uploads/productos/" + nombreArchivo);
+
+        Producto guardado = productoService.guardarProducto(producto);
+
+        return ResponseEntity.ok(convertirADTO(guardado));
+    }
+
+    
+    @PutMapping("/actualizar-con-imagen/{id}")
+    public ResponseEntity<ProductoDTO> actualizarConImagen(
+            @PathVariable Long id,
+            @RequestParam("nombre") String nombre,
+            @RequestParam("descripcion") String descripcion,
+            @RequestParam("categoria") String categoria,
+            @RequestParam("precio") Double precio,
+            @RequestParam("stock") Integer stock,
+            @RequestParam(value = "imagen", required = false) MultipartFile imagenFile
+    ) throws IOException {
+
+        Producto producto = productoService.obtenerProductoPorId(id);
+
+        if (producto == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        producto.setNombre(nombre);
+        producto.setDescripcion(descripcion);
+        producto.setCategoria(categoria);
+        producto.setPrecio(new java.math.BigDecimal(precio));
+        producto.setStock(stock);
+
+        if (imagenFile != null && !imagenFile.isEmpty()) {
+        	String rutaBase = System.getProperty("user.dir") + "/uploads/productos/";
+            File carpeta = new File(rutaBase);
+
+            if (!carpeta.exists()) {
+                carpeta.mkdirs();
+            }
+
+            String nombreArchivo = UUID.randomUUID() + "_" + imagenFile.getOriginalFilename();
+            Path rutaCompleta = Paths.get(rutaBase + nombreArchivo);
+
+            Files.write(rutaCompleta, imagenFile.getBytes());
+
+            producto.setImagen("/uploads/productos/" + nombreArchivo);
+        }
+
+        Producto actualizado = productoService.guardarProducto(producto);
+
+        return ResponseEntity.ok(convertirADTO(actualizado));
+    }
+ 
+    
     
     
     

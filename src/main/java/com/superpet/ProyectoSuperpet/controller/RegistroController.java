@@ -38,7 +38,7 @@ public class RegistroController {
 
     @GetMapping("/registro")
     public String mostrarFormulario() {
-        return "registro";//"home"; // Apunta a la vista home
+        return "registro";
     }
 
     @PostMapping("/registro")
@@ -49,13 +49,12 @@ public class RegistroController {
                                    @RequestParam("password") String password,
                                    RedirectAttributes redirectAttributes) {
         try {
-            // Verificar si el email ya existe
+       
             if (usuarioService.buscarPorEmail(email) != null) {
                 redirectAttributes.addFlashAttribute("error", "Ya existe una cuenta con este correo.");
                 return "redirect:/";
             }
 
-            // 1. Guardar cliente
             Cliente cliente = new Cliente();
             cliente.setNombre(nombre);
             cliente.setTelefono(telefono);
@@ -63,11 +62,9 @@ public class RegistroController {
             cliente.setDireccion(direccion);
             clienteRepo.save(cliente);
 
-            // 2. Obtener rol CLIENTE
             Rol rolCliente = rolRepo.findByNombre("CLIENTE")
                     .orElseThrow(() -> new RuntimeException("Rol CLIENTE no encontrado"));
 
-            // 3. Guardar usuario vinculado
             Usuario usuario = new Usuario();
             usuario.setEmail(email);
             usuario.setPassword(passwordEncoder.encode(password));
@@ -75,10 +72,8 @@ public class RegistroController {
             usuario.setCliente(cliente);
             usuarioRepo.save(usuario);
 
-            // 4. Agregar atributo para SweetAlert
             redirectAttributes.addFlashAttribute("registroExitoso", true);
 
-            // 5. Redirigir al login
             return "redirect:/login";
 
         } catch (Exception e) {

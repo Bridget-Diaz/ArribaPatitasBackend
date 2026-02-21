@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Error</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+
+<h2>❌ Ocurrió un problema</h2>
+
+<p th:text="${mensaje}"></p>
+
+<a th:href="@{/pedido/mis-pedidos}" class="btn-action">
+    ⬅ Volver a mis pedidos
+</a>
+
+</body>
+</html>

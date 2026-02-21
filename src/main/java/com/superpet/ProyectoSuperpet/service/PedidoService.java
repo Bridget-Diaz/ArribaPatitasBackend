@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import java.time.LocalDateTime;
+
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.superpet.ProyectoSuperpet.model.Cliente;
@@ -55,10 +57,33 @@ public class PedidoService {
         pedidoRepo.deleteById(id);
     }
 
-    // ⭐⭐⭐ ESTE ES EL QUE TE FALTABA
     public List<Pedido> listarPedidosPorCliente(Long idCliente) {
         return pedidoRepo.findByCliente_Id(idCliente);
     }
+
+    
+    
+    private void cancelarPedido(Pedido pedido) {
+        pedido.setEstado(EstadoPedido.CANCELADO);
+        pedidoRepo.save(pedido);
+    }
+
+
+    
+    @Scheduled(fixedRate = 60000)
+    @Transactional
+    public void cancelarPedidosExpirados() {
+
+        List<Pedido> expirados = pedidoRepo
+            .findByEstadoAndFechaLimitePagoBefore(
+                EstadoPedido.PENDIENTE,
+                LocalDateTime.now()
+            );
+
+        expirados.forEach(this::cancelarPedido);
+    }
+
+    
 
 
     @Transactional
@@ -66,7 +91,9 @@ public class PedidoService {
 
         Pedido pedido = new Pedido();
         pedido.setCliente(cliente);
-        pedido.setEstado("PENDIENTE");
+        pedido.setEstado(EstadoPedido.PENDIENTE);
+        pedido.setFechaPedido(LocalDateTime.now());
+        pedido.setFechaLimitePago(LocalDateTime.now().plusMinutes(15));
 
         BigDecimal total = BigDecimal.ZERO;
         List<DetallePedido> detalles = new ArrayList<>();
@@ -76,23 +103,12 @@ public class PedidoService {
             Producto producto = productoRepo.findById(i.getIdProducto())
                     .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 
-            // ✅ Validar stock
+            //VALIDAR stock disponible
             if (producto.getStock() < i.getCantidad()) {
-                throw new RuntimeException("Stock insuficiente para: " + producto.getNombre());
+                throw new RuntimeException("Stock insuficiente: " + producto.getNombre());
             }
 
-            // ✅ Restar stock
-            producto.setStock(producto.getStock() - i.getCantidad());
-            productoRepo.save(producto);
-
-            // ✅ Registrar inventario (SALIDA)
-            Inventario mov = new Inventario();
-            mov.setProducto(producto);
-            mov.setTipoMovimiento(TipoMovimiento.SALIDA);
-            mov.setCantidad(i.getCantidad());
-            inventarioRepo.save(mov);
-
-            // ✅ Crear detalle pedido
+            //NO se descuenta stock aquí
             DetallePedido d = new DetallePedido();
             d.setPedido(pedido);
             d.setProducto(producto);
@@ -100,8 +116,6 @@ public class PedidoService {
             d.setPrecioUnitario(i.getPrecio());
 
             detalles.add(d);
-
-            // total += subtotal
             total = total.add(i.getSubtotal());
         }
 
@@ -110,6 +124,7 @@ public class PedidoService {
 
         pedidoRepo.save(pedido);
     }
+
     
     @Transactional
     public void ingresarStock(Long idProducto, int cantidad) {
@@ -126,7 +141,66 @@ public class PedidoService {
 
         inventarioRepo.save(mov);
     }
+      
+    
+    public Pedido buscarPedidoCliente(Long idPedido, Cliente cliente) {
+
+        Pedido pedido = pedidoRepo.findById(idPedido)
+                .orElseThrow(() -> new RuntimeException("Pedido no existe"));
+
+        if (!pedido.getCliente().getId().equals(cliente.getId())) {
+            throw new RuntimeException("Acceso denegado");
+        }
+
+        if (pedido.getEstado() != EstadoPedido.PENDIENTE) {
+            throw new RuntimeException("Pedido no disponible para pago");
+        }
+
+        return pedido;
+    }
 
 
+    @Transactional
+    public void pagarPedido(Long idPedido, Cliente cliente) {
+
+        Pedido pedido = pedidoRepo.findById(idPedido)
+                .orElseThrow(() -> new RuntimeException("Pedido no existe"));
+
+        if (!pedido.getCliente().getId().equals(cliente.getId())) {
+            throw new RuntimeException("Acceso denegado");
+        }
+
+        if (pedido.getEstado() != EstadoPedido.PENDIENTE) {
+            throw new RuntimeException("Pedido no válido");
+        }
+
+        if (pedido.getFechaLimitePago().isBefore(LocalDateTime.now())) {
+            cancelarPedido(pedido);
+            throw new RuntimeException("Tiempo de pago expirado");
+        }
+
+        //DESCONTAR STOCK 
+        for (DetallePedido d : pedido.getDetalles()) {
+
+            Producto p = d.getProducto();
+
+            if (p.getStock() < d.getCantidad()) {
+                throw new RuntimeException("Stock insuficiente");
+            }
+
+            p.setStock(p.getStock() - d.getCantidad());
+            productoRepo.save(p);
+
+            Inventario mov = new Inventario();
+            mov.setProducto(p);
+            mov.setTipoMovimiento(TipoMovimiento.SALIDA);
+            mov.setCantidad(d.getCantidad());
+            inventarioRepo.save(mov);
+        }
+
+        pedido.setEstado(EstadoPedido.PAGADO);
+        pedidoRepo.save(pedido);
+    }
+    
 
 }
